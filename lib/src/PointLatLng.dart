@@ -18,17 +18,6 @@ class PointLatLng {
   /// The longitude in degrees
   final double longitude;
 
-  dynamic _toJson() {
-    return <double>[latitude, longitude];
-  }
-
-  static PointLatLng _fromJson(dynamic json) {
-    if (json == null) {
-      return null;
-    }
-    return PointLatLng(json[0], json[1]);
-  }
-
   @override
   String toString() {
     return "lat: $latitude / longitude: $longitude";

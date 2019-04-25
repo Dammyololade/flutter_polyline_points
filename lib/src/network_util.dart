@@ -18,7 +18,7 @@ class NetworkUtil
         "," +
         destLong.toString() +
         "&mode=driving" +
-        "&key=${googleApiKey}";
+        "&key=$googleApiKey";
     var response = await http.get(url);
     try {
       if (response?.statusCode == 200) {

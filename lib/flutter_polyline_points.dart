@@ -7,25 +7,26 @@ import 'package:http/http.dart' as http;
 part 'src/PointLatLng.dart';
 part 'src/network_util.dart';
 
-class PolylinePoints{
-
+class PolylinePoints {
   NetworkUtil util = NetworkUtil();
 
   /// Get the list of coordinates between two geographical positions
   /// which can be used to draw polyline between this two positions
   ///
-  Future<List<PointLatLng>> getRouteBetweenCoordinates(String googleApiKey,
-      double originLat, double originLong, double destLat, double destLong) async
-  {
-    return await util.getRouteBetweenCoordinates(googleApiKey, originLat, originLong, destLat, destLong);
+  Future<List<PointLatLng>> getRouteBetweenCoordinates(
+      String googleApiKey,
+      double originLat,
+      double originLong,
+      double destLat,
+      double destLong) async {
+    return await util.getRouteBetweenCoordinates(
+        googleApiKey, originLat, originLong, destLat, destLong);
   }
 
   /// Decode and encoded google polyline
   /// e.g "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
   ///
-  List<PointLatLng> decodePolyline(String encodedString)
-  {
+  List<PointLatLng> decodePolyline(String encodedString) {
     return util.decodeEncodedPolyline(encodedString);
   }
-  //polylinePoints.getRouteBetweenCoordinates("", 6.5212402, 3.3679965, 6.595680, 3.337030);
 }
