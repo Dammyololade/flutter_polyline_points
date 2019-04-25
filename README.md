@@ -32,7 +32,7 @@ print(result);
 ## Second method
 Decode an encoded google polyline string e.g _p~iF~ps|U_ulLnnqC_mqNvxq`@
 ```dart
-List<PointLatLng> result = decodePolyline("_p~iF~ps|U_ulLnnqC_mqNvxq`@");
+List<PointLatLng> result = polylinePoints.decodePolyline("_p~iF~ps|U_ulLnnqC_mqNvxq`@");
 print(result);
 ``` 
 
