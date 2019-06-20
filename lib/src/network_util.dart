@@ -27,7 +27,6 @@ class NetworkUtil
         destLong.toString() +
         "&mode=$mode" +
         "&key=$googleApiKey";
-    print('GOOGLE MAPS URL: ' + url);
     var response = await http.get(url);
     try {
       if (response?.statusCode == 200) {
