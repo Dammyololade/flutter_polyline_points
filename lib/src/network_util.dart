@@ -1,13 +1,21 @@
 part of flutter_polyline_points;
 
+enum TravelMode {
+  driving,
+  bicycling,
+  transit,
+  walking
+}
+
 class NetworkUtil
 {
 
   ///Get the encoded string from google directions api
   ///
   Future<List<PointLatLng>> getRouteBetweenCoordinates(String googleApiKey, double originLat, double originLong,
-      double destLat, double destLong)async
+      double destLat, double destLong, TravelMode travelMode) async
   {
+    String mode = travelMode.toString().replaceAll('TravelMode.', '');
     List<PointLatLng> polylinePoints = [];
     String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
         originLat.toString() +
@@ -17,8 +25,9 @@ class NetworkUtil
         destLat.toString() +
         "," +
         destLong.toString() +
-        "&mode=driving" +
+        "&mode=$mode" +
         "&key=$googleApiKey";
+    print('GOOGLE MAPS URL: ' + url);
     var response = await http.get(url);
     try {
       if (response?.statusCode == 200) {
