@@ -19,7 +19,7 @@ class PolylinePoints {
       double originLong,
       double destLat,
       double destLong,
-      TravelMode travelMode) async {
+      {TravelMode travelMode = TravelMode.driving}) async {
     return await util.getRouteBetweenCoordinates(
         googleApiKey, originLat, originLong, destLat, destLong, travelMode);
   }
