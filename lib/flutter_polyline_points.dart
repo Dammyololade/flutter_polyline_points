@@ -18,9 +18,10 @@ class PolylinePoints {
       double originLat,
       double originLong,
       double destLat,
-      double destLong) async {
+      double destLong,
+      {TravelMode travelMode = TravelMode.driving}) async {
     return await util.getRouteBetweenCoordinates(
-        googleApiKey, originLat, originLong, destLat, destLong);
+        googleApiKey, originLat, originLong, destLat, destLong, travelMode);
   }
 
   /// Decode and encoded google polyline
