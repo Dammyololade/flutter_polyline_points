@@ -3,8 +3,8 @@ A flutter plugin that decodes encoded google polyline string into list of geo-co
 
 <div style="text-align: center"><table><tr>
   <td style="text-align: center">
-  <a href="https://github.com/Dammyololade/flutter_polyline_points/blob/master/poly.jpeg">
-    <img src="https://github.com/Dammyololade/flutter_polyline_points/blob/master/poly.jpeg" width="200"/></a>
+  <a href="https://raw.githubusercontent.com/Dammyololade/flutter_polyline_points/master/poly.jpeg">
+    <img src="https://raw.githubusercontent.com/Dammyololade/flutter_polyline_points/master/poly.jpeg" width="200"/></a>
 </td>
 </tr></table></div>
 
