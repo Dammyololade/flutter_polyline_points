@@ -3,6 +3,8 @@ part of flutter_polyline_points;
 enum TravelMode { driving, bicycling, transit, walking }
 
 class NetworkUtil {
+  static const String STATUS_OK = "ok";
+
   ///Get the encoded string from google directions api
   ///
   Future<List<PointLatLng>> getRouteBetweenCoordinates(
@@ -27,17 +29,16 @@ class NetworkUtil {
             "&key=$googleApiKey";
     print('GOOGLE MAPS URL: ' + url);
     var response = await http.get(url);
-    try {
-      if (response?.statusCode == 200) {
-        var parsedJson = json.decode(response.body);
-        if(parsedJson["routes"] != null && parsedJson["routes"].isNotEmpty){
-          polylinePoints = decodeEncodedPolyline(parsedJson["routes"][0]["overview_polyline"]["points"]);
-        } else {
-          throw Exception(parsedJson["error_message"]);
-        }
+    if (response?.statusCode == 200) {
+      var parsedJson = json.decode(response.body);
+      if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
+          parsedJson["routes"] != null &&
+          parsedJson["routes"].isNotEmpty) {
+        polylinePoints = decodeEncodedPolyline(
+            parsedJson["routes"][0]["overview_polyline"]["points"]);
+      } else {
+        throw Exception(parsedJson["error_message"]);
       }
-    } catch (error) {
-      throw Exception(error.toString());
     }
     return polylinePoints;
   }

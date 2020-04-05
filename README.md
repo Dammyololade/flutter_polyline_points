@@ -37,3 +37,7 @@ print(result);
 ``` 
 
 See the example directory for a complete sample app
+
+## Hint
+kindly ensure you use a valid google api key,  
+[for help generating api key for your project click this link](https://developers.google.com/maps/documentation/directions/get-api-key)
