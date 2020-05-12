@@ -1,46 +1,61 @@
-part of flutter_polyline_points;
+import 'dart:convert';
 
-enum TravelMode { driving, bicycling, transit, walking }
+import '../src/utils/polyline_waypoint.dart';
+import '../src/utils/travel_modes.dart';
+import '../src/PointLatLng.dart';
+import 'package:http/http.dart' as http;
+
+import 'utils/polyline_result.dart';
 
 class NetworkUtil {
   static const String STATUS_OK = "ok";
 
   ///Get the encoded string from google directions api
   ///
-  Future<List<PointLatLng>> getRouteBetweenCoordinates(
-      String googleApiKey,
-      double originLat,
-      double originLong,
-      double destLat,
-      double destLong,
-      TravelMode travelMode) async {
+  Future<PolylineResult> getRouteBetweenCoordinates(
+    String googleApiKey,
+    PointLatLng origin,
+    PointLatLng destination,
+    TravelMode travelMode,
+    List<PolylineWayPoint> wayPoints,
+    bool avoidHighways,
+    bool avoidTolls,
+    bool avoidFerries,
+  ) async {
     String mode = travelMode.toString().replaceAll('TravelMode.', '');
-    List<PointLatLng> polylinePoints = [];
-    String url =
-        "https://maps.googleapis.com/maps/api/directions/json?origin=" +
-            originLat.toString() +
-            "," +
-            originLong.toString() +
-            "&destination=" +
-            destLat.toString() +
-            "," +
-            destLong.toString() +
-            "&mode=$mode" +
-            "&key=$googleApiKey";
+    PolylineResult result = PolylineResult();
+    var params = {
+      "origin": "${origin.latitude},${origin.longitude}",
+      "destination": "${destination.latitude},${destination.longitude}",
+      "travelMode": mode,
+      "avoidHighways": "$avoidHighways",
+      "avoidFerries": "$avoidFerries",
+      "avoidTolls": "$avoidTolls",
+      "key": googleApiKey
+    };
+    if (wayPoints.isNotEmpty) {
+      params.addAll({
+        "waypoints": json.encode(List.from(wayPoints.map((e) => e.toMap())))
+      });
+    }
+    Uri uri = Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
+
+    String url = uri.toString();
     print('GOOGLE MAPS URL: ' + url);
     var response = await http.get(url);
     if (response?.statusCode == 200) {
       var parsedJson = json.decode(response.body);
+      result.status = parsedJson["status"];
       if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
           parsedJson["routes"] != null &&
           parsedJson["routes"].isNotEmpty) {
-        polylinePoints = decodeEncodedPolyline(
+        result.points = decodeEncodedPolyline(
             parsedJson["routes"][0]["overview_polyline"]["points"]);
       } else {
-        throw Exception(parsedJson["error_message"]);
+        result.errorMessage = parsedJson["error_message"];
       }
     }
-    return polylinePoints;
+    return result;
   }
 
   ///decode the google encoded string using Encoded Polyline Algorithm Format

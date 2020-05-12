@@ -21,12 +21,13 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 ```
 
 ## First method
-Get the list of points by Geo-coordinate
+Get the list of points by Geo-coordinate, this return an instance of PolylineResult, which
+contains the status of the api, the errorMessage, and the list of decoded points.
 ```dart
 PolylinePoints polylinePoints = PolylinePoints();
-List<PointLatLng> result = await polylinePoints.getRouteBetweenCoordinates(googleAPiKey,
+PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(googleAPiKey,
         _originLatitude, _originLongitude, _destLatitude, _destLongitude);
-print(result);
+print(result.points);
 ```
 
 ## Second method
@@ -40,4 +41,4 @@ See the example directory for a complete sample app
 
 ## Hint
 kindly ensure you use a valid google api key,  
-[for help generating api key for your project click this link](https://developers.google.com/maps/documentation/directions/get-api-key)
+[If you need help generating api key for your project click this link](https://developers.google.com/maps/documentation/directions/get-api-key)

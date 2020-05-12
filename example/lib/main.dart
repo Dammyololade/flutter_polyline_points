@@ -97,15 +97,15 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   _getPolyline() async {
-    List<PointLatLng> result = await polylinePoints.getRouteBetweenCoordinates(
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         Constants.API_KEY,
-        _originLatitude,
-        _originLongitude,
-        _destLatitude,
-        _destLongitude,
-        travelMode: TravelMode.driving);
-    if (result.isNotEmpty) {
-      result.forEach((PointLatLng point) {
+        PointLatLng(_originLatitude, _originLongitude),
+        PointLatLng(_destLatitude, _destLongitude),
+        travelMode: TravelMode.driving,
+      wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     }
