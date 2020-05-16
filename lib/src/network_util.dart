@@ -38,7 +38,8 @@ class NetworkUtil {
         "waypoints": json.encode(List.from(wayPoints.map((e) => e.toMap())))
       });
     }
-    Uri uri = Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
+    Uri uri =
+        Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
 
     String url = uri.toString();
     print('GOOGLE MAPS URL: ' + url);
@@ -51,13 +52,21 @@ class NetworkUtil {
           parsedJson["routes"].isNotEmpty) {
         result.points = decodeEncodedPolyline(
             parsedJson["routes"][0]["overview_polyline"]["points"]);
-            result.distance = TextValue.create(parsedJson["routes"][0]['legs'][0]['distance']);
-            result.duration = TextValue.create(parsedJson["routes"][0]['legs'][0]['duration']);
+        createExtraData(parsedJson, result);
       } else {
         result.errorMessage = parsedJson["error_message"];
       }
     }
     return result;
+  }
+
+  ///Create extra data for points
+  ///
+  void createExtraData(parsedJson, PolylineResult result) {
+    for (var item in parsedJson["routes"][0]['legs']) {
+      result.distances.add(TextValue.create(item['distance']));
+      result.durations.add(TextValue.create(item['duration']));
+    }
   }
 
   ///decode the google encoded string using Encoded Polyline Algorithm Format

@@ -19,10 +19,10 @@ class PolylineResult {
   String errorMessage;
 
   /// The distance between the points
-  TextValue distance;
+  List<TextValue> distances = [];
 
   /// The time duration
-  TextValue duration;
+  List<TextValue> durations = [];
 
   PolylineResult({this.status, this.points = const [], this.errorMessage = ""});
 
