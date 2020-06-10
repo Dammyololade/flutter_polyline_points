@@ -4,11 +4,11 @@ import 'dart:convert';
 
 import 'package:flutter_polyline_points/src/utils/polyline_result.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_waypoint.dart';
-import 'package:flutter_polyline_points/src/utils/travel_modes.dart';
+import 'package:flutter_polyline_points/src/utils/request_enums.dart';
 import 'src/PointLatLng.dart';
 import 'src/network_util.dart';
 
-export 'src/utils/travel_modes.dart';
+export 'src/utils/request_enums.dart';
 export 'src/utils/polyline_waypoint.dart';
 export 'src/network_util.dart';
 export 'src/PointLatLng.dart';
