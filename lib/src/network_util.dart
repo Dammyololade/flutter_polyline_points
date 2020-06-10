@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../src/utils/polyline_waypoint.dart';
-import '../src/utils/travel_modes.dart';
+import '../src/utils/request_enums.dart';
 import '../src/PointLatLng.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,7 +27,7 @@ class NetworkUtil {
     var params = {
       "origin": "${origin.latitude},${origin.longitude}",
       "destination": "${destination.latitude},${destination.longitude}",
-      "travelMode": mode,
+      "mode": mode,
       "avoidHighways": "$avoidHighways",
       "avoidFerries": "$avoidFerries",
       "avoidTolls": "$avoidTolls",
