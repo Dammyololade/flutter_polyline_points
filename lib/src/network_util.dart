@@ -13,15 +13,15 @@ class NetworkUtil {
   ///Get the encoded string from google directions api
   ///
   Future<PolylineResult> getRouteBetweenCoordinates(
-    String googleApiKey,
-    PointLatLng origin,
-    PointLatLng destination,
-    TravelMode travelMode,
-    List<PolylineWayPoint> wayPoints,
-    bool avoidHighways,
-    bool avoidTolls,
-    bool avoidFerries,
-  ) async {
+      String googleApiKey,
+      PointLatLng origin,
+      PointLatLng destination,
+      TravelMode travelMode,
+      List<PolylineWayPoint> wayPoints,
+      bool avoidHighways,
+      bool avoidTolls,
+      bool avoidFerries,
+      bool optimizeWaypoints) async {
     String mode = travelMode.toString().replaceAll('TravelMode.', '');
     PolylineResult result = PolylineResult();
     var params = {
@@ -34,11 +34,15 @@ class NetworkUtil {
       "key": googleApiKey
     };
     if (wayPoints.isNotEmpty) {
-      params.addAll({
-        "waypoints": json.encode(List.from(wayPoints.map((e) => e.toMap())))
-      });
+      List<String> wayPointsArray = wayPoints.map((point) => point.toString());
+      String wayPointsString = wayPointsArray.join('|');
+      if (optimizeWaypoints) {
+        wayPointsString = 'optimize:true|$wayPointsString';
+      }
+      params.addAll({"waypoints": wayPointsString});
     }
-    Uri uri = Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
+    Uri uri =
+        Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
 
     String url = uri.toString();
     print('GOOGLE MAPS URL: ' + url);
