@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 /// description:
 /// project: flutter_polyline_points
-/// @package: 
+/// @package:
 /// @author: dammyololade
 /// created on: 12/05/2020
 class PolylineWayPoint {
-
   /// the location of the waypoint,
   /// You can specify waypoints using the following values:
   /// --- Latitude/longitude coordinates (lat/lng): an explicit value pair. (-34.92788%2C138.60008 comma, no space),
@@ -20,16 +19,14 @@ class PolylineWayPoint {
   /// which has the effect of splitting the route into two routes
   bool stopOver;
 
-
   PolylineWayPoint({@required this.location, this.stopOver = true});
-
-  Map<String, dynamic> toMap() => {
-    "location": location,
-    "stopover": stopOver
-  };
 
   @override
   String toString() {
-    return "location=$location,stopover=$stopOver";
+    if (stopOver) {
+      return location;
+    } else {
+      return "via:$location";
+    }
   }
 }
