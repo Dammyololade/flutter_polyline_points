@@ -1,3 +1,6 @@
+## [0.2.2] - 10-06-2020
+FIxed issues with incorrect key being passed as travelmode
+Changed waypoint documentation
 ## [0.2.1] - 05-04-2020.
 Breaking change, the response object has been refined to a more
 suitable object that contains the status of the api and the error message.
