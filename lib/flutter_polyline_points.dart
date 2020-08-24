@@ -1,7 +1,5 @@
 library flutter_polyline_points;
 
-import 'dart:convert';
-
 import 'package:flutter_polyline_points/src/utils/polyline_result.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_waypoint.dart';
 import 'package:flutter_polyline_points/src/utils/request_enums.dart';
