@@ -34,7 +34,7 @@ class NetworkUtil {
       "key": googleApiKey
     };
     if (wayPoints.isNotEmpty) {
-      List wayPointsArray=[];
+      List wayPointsArray = [];
       wayPoints.forEach((point) => wayPointsArray.add(point.location));
       String wayPointsString = wayPointsArray.join('|');
       if (optimizeWaypoints) {
@@ -46,7 +46,7 @@ class NetworkUtil {
         Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
 
     String url = uri.toString();
-    print('GOOGLE MAPS URL: ' + url);
+    // print('GOOGLE MAPS URL: ' + url);
     var response = await http.get(url);
     if (response?.statusCode == 200) {
       var parsedJson = json.decode(response.body);
