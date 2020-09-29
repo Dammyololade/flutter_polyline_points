@@ -1,3 +1,5 @@
+## [0.2.4] - 29-09-2020
+Fixed issues with waypoint
 ## [0.2.3] - 24-08-2020
 Fixed a bug with adding waypoint to request thanks to [EnzoSeason](https://github.com/EnzoSeason)
 ## [0.2.2] - 10-06-2020
