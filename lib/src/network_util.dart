@@ -34,7 +34,8 @@ class NetworkUtil {
       "key": googleApiKey
     };
     if (wayPoints.isNotEmpty) {
-      List<String> wayPointsArray = wayPoints.map((point) => point.toString());
+      List wayPointsArray=[];
+      wayPoints.forEach((point) => wayPointsArray.add(point.location));
       String wayPointsString = wayPointsArray.join('|');
       if (optimizeWaypoints) {
         wayPointsString = 'optimize:true|$wayPointsString';
