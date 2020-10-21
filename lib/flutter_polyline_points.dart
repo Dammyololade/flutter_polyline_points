@@ -38,6 +38,31 @@ class PolylinePoints {
         optimizeWaypoints);
   }
 
+  /// Get the list of coordinates from two or more geographical positions
+  /// which can be used to draw polyline from this two or more positions
+  ///
+  Future<PolylineResult> getRouteFromCoordinates(
+      String googleApiKey,
+      PointLatLng origin,
+      PointLatLng destination,
+      List<PolylineWayPoint> wayPoints,
+      {TravelMode travelMode = TravelMode.driving,
+      bool avoidHighways = false,
+      bool avoidTolls = false,
+      bool avoidFerries = true,
+      bool optimizeWaypoints = false}) async {
+    return await util.getRouteFromCoordinates(
+        googleApiKey,
+        origin,
+        destination,
+        travelMode,
+        wayPoints,
+        avoidHighways,
+        avoidTolls,
+        avoidFerries,
+        optimizeWaypoints);
+  }
+
   /// Decode and encoded google polyline
   /// e.g "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
   ///
