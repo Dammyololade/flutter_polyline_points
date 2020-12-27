@@ -54,8 +54,9 @@ class NetworkUtil {
       if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
           parsedJson["routes"] != null &&
           parsedJson["routes"].isNotEmpty) {
-        result.points = decodeEncodedPolyline(
-            parsedJson["routes"][0]["overview_polyline"]["points"]);
+        final polyline = parsedJson["routes"][0]["overview_polyline"]["points"];
+        result.points = decodeEncodedPolyline(polyline);
+        result.polyline = polyline;
       } else {
         result.errorMessage = parsedJson["error_message"];
       }
