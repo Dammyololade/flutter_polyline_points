@@ -1,3 +1,5 @@
+## [0.2.5] - 07-03-2021
+updating http dependency to ^0.13.0
 ## [0.2.4] - 29-09-2020
 Fixed issues with waypoint
 ## [0.2.3] - 24-08-2020

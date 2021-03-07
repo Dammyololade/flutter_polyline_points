@@ -1,6 +1,6 @@
 name: flutter_polyline_points
 description: A flutter package to get polyline points by either passing the coordinates or google encoded polyline string
-version: 0.2.4
+version: 0.2.5
 homepage: https://github.com/Dammyololade/flutter_polyline_points
 
 environment:
