@@ -45,9 +45,9 @@ class NetworkUtil {
     Uri uri =
         Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
 
-    String url = uri.toString();
+    //String url = uri.toString();
     // print('GOOGLE MAPS URL: ' + url);
-    var response = await http.get(url);
+    var response = await http.get(uri);
     if (response?.statusCode == 200) {
       var parsedJson = json.decode(response.body);
       result.status = parsedJson["status"];
