@@ -10,7 +10,7 @@ class PolylineResult {
   /// the api status retuned from google api
   ///
   /// returns OK if the api call is successful
-  String status;
+  String? status;
 
   /// list of decoded points
   List<PointLatLng> points;
