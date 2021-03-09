@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// description:
 /// project: flutter_polyline_points
 /// @package:
