@@ -27,7 +27,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  google_maps_flutter: ^0.5.7
+  google_maps_flutter: ^2.0.1
   flutter_polyline_points:
     path: ../
 
