@@ -71,4 +71,5 @@ build/
 
 pubspec.lock
 lib/src/Constants.dart
+lib/src/constants.dart
 example/lib/Constants.dart
