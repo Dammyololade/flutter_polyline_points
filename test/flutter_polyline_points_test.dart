@@ -1,4 +1,4 @@
-import 'package:flutter_polyline_points/src/Constants.dart';
+import 'package:flutter_polyline_points/src/constants.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_result.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -14,7 +14,7 @@ description: A new Flutter application to describe the use of polyline_point lib
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -27,7 +27,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  google_maps_flutter: ^2.0.1
+  google_maps_flutter: ^1.1.1
   flutter_polyline_points:
     path: ../
 
