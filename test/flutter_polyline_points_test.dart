@@ -21,7 +21,6 @@ void main() {
         polylinePoints.decodePolyline("_p~iF~ps|U_ulLnnqC_mqNvxq`@");
     print("Answer ---- ");
     print(points);
-    assert(points != null);
     assert(points.length > 0);
   });
 }
