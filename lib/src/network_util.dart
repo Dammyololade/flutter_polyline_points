@@ -56,7 +56,7 @@ class NetworkUtil {
         result.points = decodeEncodedPolyline(
             parsedJson["routes"][0]["overview_polyline"]["points"]);
       } else {
-        result.errorMessage = parsedJson["error_message"];
+        result.errorMessage = parsedJson["error_message"] ?? '';
       }
     }
     return result;
