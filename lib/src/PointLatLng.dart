@@ -1,8 +1,5 @@
-
-
 /// A pair of latitude and longitude coordinates, stored as degrees.
 class PointLatLng {
-
   /// Creates a geographical location specified in degrees [latitude] and
   /// [longitude].
   ///

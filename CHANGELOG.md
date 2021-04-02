@@ -1,3 +1,5 @@
+## [1.0.0-nullsafety] - 02-04-2021
+Added null safety
 ## [0.2.6] - 07-03-2021
 updated http package
 ## [0.2.5] - 07-03-2021
