@@ -3,8 +3,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
-import 'Constants.dart';
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -45,7 +43,7 @@ class _MapScreenState extends State<MapScreen> {
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
-  String googleAPiKey = Constants.MAP_API_KEY;
+  String googleAPiKey = "Please provide your api key";
 
   @override
   void initState() {
@@ -101,7 +99,7 @@ class _MapScreenState extends State<MapScreen> {
 
   _getPolyline() async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        Constants.API_KEY,
+        googleAPiKey,
         PointLatLng(_originLatitude, _originLongitude),
         PointLatLng(_destLatitude, _destLongitude),
         travelMode: TravelMode.driving,
