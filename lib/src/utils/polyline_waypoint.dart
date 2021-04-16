@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 /// description:
 /// project: flutter_polyline_points
@@ -19,7 +18,7 @@ class PolylineWayPoint {
   /// which has the effect of splitting the route into two routes
   bool stopOver;
 
-  PolylineWayPoint({@required this.location, this.stopOver = true});
+  PolylineWayPoint({required this.location, this.stopOver = true});
 
   @override
   String toString() {

@@ -7,9 +7,7 @@ class PointLatLng {
   /// [longitude].
   ///
   const PointLatLng(double latitude, double longitude)
-      : assert(latitude != null),
-        assert(longitude != null),
-        this.latitude = latitude,
+      : this.latitude = latitude,
         this.longitude = longitude;
 
   /// The latitude in degrees.
