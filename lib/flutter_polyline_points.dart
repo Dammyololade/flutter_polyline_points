@@ -19,23 +19,29 @@ class PolylinePoints {
   /// which can be used to draw polyline between this two positions
   ///
   Future<PolylineResult> getRouteBetweenCoordinates(
-      String googleApiKey, PointLatLng origin, PointLatLng destination,
-      {TravelMode travelMode = TravelMode.driving,
-      List<PolylineWayPoint> wayPoints = const [],
-      bool avoidHighways = false,
-      bool avoidTolls = false,
-      bool avoidFerries = true,
-      bool optimizeWaypoints = false}) async {
-    return await util.getRouteBetweenCoordinates(
-        googleApiKey,
-        origin,
-        destination,
-        travelMode,
-        wayPoints,
-        avoidHighways,
-        avoidTolls,
-        avoidFerries,
-        optimizeWaypoints);
+    String googleApiKey,
+    PointLatLng origin,
+    PointLatLng destination, {
+    TravelMode travelMode = TravelMode.driving,
+    List<PolylineWayPoint> wayPoints = const [],
+    bool avoidHighways = false,
+    bool avoidTolls = false,
+    bool avoidFerries = true,
+    bool optimizeWaypoints = false,
+    bool alternatives = false,
+  }) {
+    return util.getRouteBetweenCoordinates(
+      googleApiKey,
+      origin,
+      destination,
+      travelMode,
+      wayPoints,
+      avoidHighways,
+      avoidTolls,
+      avoidFerries,
+      optimizeWaypoints,
+      alternatives,
+    );
   }
 
   /// Decode and encoded google polyline

@@ -105,7 +105,7 @@ class _MapScreenState extends State<MapScreen> {
         travelMode: TravelMode.driving,
         wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]);
     if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
+      result.points.first.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     }
