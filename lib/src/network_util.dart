@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter_polyline_points/src/utils/bounds.dart';
+import 'package:flutter_polyline_points/src/utils/leg.dart';
+import 'package:flutter_polyline_points/src/utils/route.dart';
+import 'package:flutter_polyline_points/src/utils/status_code.dart';
 import 'package:http/http.dart' as http;
 
 import '../src/PointLatLng.dart';
@@ -8,31 +12,34 @@ import '../src/utils/request_enums.dart';
 import 'utils/polyline_result.dart';
 
 class NetworkUtil {
-  static const String STATUS_OK = "ok";
-
   ///Get the encoded string from google directions api
   ///
   Future<PolylineResult> getRouteBetweenCoordinates(
-      String googleApiKey,
-      PointLatLng origin,
-      PointLatLng destination,
-      TravelMode travelMode,
-      List<PolylineWayPoint> wayPoints,
-      bool avoidHighways,
-      bool avoidTolls,
-      bool avoidFerries,
-      bool optimizeWaypoints) async {
-    String mode = travelMode.toString().replaceAll('TravelMode.', '');
-    PolylineResult result = PolylineResult();
-    var params = {
+    String googleApiKey,
+    PointLatLng origin,
+    PointLatLng destination,
+    TravelMode travelMode,
+    List<PolylineWayPoint> wayPoints,
+    bool avoidHighways,
+    bool avoidTolls,
+    bool avoidFerries,
+    bool optimizeWaypoints,
+    bool alternatives,
+  ) async {
+    final mode = travelMode.toString().replaceAll('TravelMode.', '');
+    final result = PolylineResult();
+
+    final params = {
       "origin": "${origin.latitude},${origin.longitude}",
       "destination": "${destination.latitude},${destination.longitude}",
       "mode": mode,
       "avoidHighways": "$avoidHighways",
       "avoidFerries": "$avoidFerries",
       "avoidTolls": "$avoidTolls",
+      "alternatives": "$alternatives",
       "key": googleApiKey
     };
+
     if (wayPoints.isNotEmpty) {
       List wayPointsArray = [];
       wayPoints.forEach((point) => wayPointsArray.add(point.location));
@@ -49,12 +56,52 @@ class NetworkUtil {
     var response = await http.get(uri);
     if (response.statusCode == 200) {
       var parsedJson = json.decode(response.body);
-      result.status = parsedJson["status"];
-      if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
+      result.status = StatusCode(parsedJson["status"]);
+      if (result.status == StatusCode.OK &&
           parsedJson["routes"] != null &&
           parsedJson["routes"].isNotEmpty) {
-        result.points = decodeEncodedPolyline(
-            parsedJson["routes"][0]["overview_polyline"]["points"]);
+        final routes = <Route>[];
+
+        for (final route in parsedJson["routes"]) {
+          final bounds = Bounds(
+            PointLatLng(
+              route["bounds"]["northeast"]["lat"],
+              route["bounds"]["northeast"]["lng"],
+            ),
+            PointLatLng(
+              route["bounds"]["southwest"]["lat"],
+              route["bounds"]["southwest"]["lng"],
+            ),
+          );
+
+          final legs = <Leg>[];
+
+          for (final leg in route["legs"]) {
+            legs.add(Leg(
+              leg["distance"]["value"],
+              leg["distance"]["text"],
+              Duration(seconds: leg["duration"]["value"]),
+              leg["duration"]["text"],
+              leg["end_address"],
+              PointLatLng(
+                leg["end_location"]["lat"],
+                leg["end_location"]["lng"],
+              ),
+              leg["start_address"],
+              PointLatLng(
+                leg["start_location"]["lat"],
+                leg["start_location"]["lng"],
+              ),
+            ));
+          }
+
+          final points = decodeEncodedPolyline(
+            route["overview_polyline"]["points"],
+          );
+
+          routes.add(Route(bounds, legs, points));
+        }
+        result.routes = routes;
       } else {
         result.errorMessage = parsedJson["error_message"];
       }
