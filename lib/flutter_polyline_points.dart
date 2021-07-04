@@ -11,6 +11,11 @@ export 'src/utils/polyline_waypoint.dart';
 export 'src/network_util.dart';
 export 'src/PointLatLng.dart';
 export 'src/utils/polyline_result.dart';
+export 'src/utils/bounds.dart';
+export 'src/utils/geocoded_waypoint.dart';
+export 'src/utils/leg.dart';
+export 'src/utils/route.dart';
+export 'src/utils/status_code.dart';
 
 class PolylinePoints {
   NetworkUtil util = NetworkUtil();
