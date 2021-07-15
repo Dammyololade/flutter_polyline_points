@@ -45,11 +45,11 @@ class NetworkUtil {
       }
       params["waypoints"] = wayPointsString;
     }
-
-    if (avoidHighways || avoidTolls || avoidFerries) {
-      final list = [avoidHighways, avoidTolls, avoidFerries].where((_) => _);
-      params["avoid"] = list.join('|');
-    }
+    final avoidences = <String>[];
+    if (avoidHighways) avoidences.add("highways");
+    if (avoidTolls) avoidences.add("tolls");
+    if (avoidFerries) avoidences.add("ferries");
+    if (avoidences.isNotEmpty) params["avoid"] = avoidences.join('|');
 
     Uri uri =
         Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
