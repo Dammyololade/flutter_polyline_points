@@ -33,22 +33,24 @@ class NetworkUtil {
       "origin": "${origin.latitude},${origin.longitude}",
       "destination": "${destination.latitude},${destination.longitude}",
       "mode": mode,
-      "avoidHighways": "$avoidHighways",
-      "avoidFerries": "$avoidFerries",
-      "avoidTolls": "$avoidTolls",
       "alternatives": "$alternatives",
       "key": googleApiKey
     };
 
     if (wayPoints.isNotEmpty) {
-      List wayPointsArray = [];
-      wayPoints.forEach((point) => wayPointsArray.add(point.location));
+      final wayPointsArray = wayPoints.map((point) => point.location);
       String wayPointsString = wayPointsArray.join('|');
       if (optimizeWaypoints) {
         wayPointsString = 'optimize:true|$wayPointsString';
       }
-      params.addAll({"waypoints": wayPointsString});
+      params["waypoints"] = wayPointsString;
     }
+
+    if (avoidHighways || avoidTolls || avoidFerries) {
+      final list = [avoidHighways, avoidTolls, avoidFerries].where((_) => _);
+      params["avoid"] = list.join('|');
+    }
+
     Uri uri =
         Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
 
