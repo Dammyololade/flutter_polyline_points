@@ -58,55 +58,61 @@ class NetworkUtil {
     var response = await http.get(uri);
     if (response.statusCode == 200) {
       var parsedJson = json.decode(response.body);
-      result.status = StatusCode(parsedJson["status"]);
-      if (result.status == StatusCode.OK &&
-          parsedJson["routes"] != null &&
-          parsedJson["routes"].isNotEmpty) {
-        final routes = <Route>[];
+      return parseJson(parsedJson);
+    }
+    return result;
+  }
 
-        for (final route in parsedJson["routes"]) {
-          final bounds = Bounds(
+  PolylineResult parseJson(dynamic parsedJson) {
+    final result = PolylineResult();
+    result.status = StatusCode(parsedJson["status"]);
+    if (result.status == StatusCode.OK &&
+        parsedJson["routes"] != null &&
+        parsedJson["routes"].isNotEmpty) {
+      final routes = <Route>[];
+
+      for (final route in parsedJson["routes"]) {
+        final bounds = Bounds(
+          PointLatLng(
+            route["bounds"]["northeast"]["lat"],
+            route["bounds"]["northeast"]["lng"],
+          ),
+          PointLatLng(
+            route["bounds"]["southwest"]["lat"],
+            route["bounds"]["southwest"]["lng"],
+          ),
+        );
+
+        final legs = <Leg>[];
+
+        for (final leg in route["legs"]) {
+          legs.add(Leg(
+            leg["distance"]["value"],
+            leg["distance"]["text"],
+            Duration(seconds: leg["duration"]["value"]),
+            leg["duration"]["text"],
+            leg["end_address"],
             PointLatLng(
-              route["bounds"]["northeast"]["lat"],
-              route["bounds"]["northeast"]["lng"],
+              leg["end_location"]["lat"],
+              leg["end_location"]["lng"],
             ),
+            leg["start_address"],
             PointLatLng(
-              route["bounds"]["southwest"]["lat"],
-              route["bounds"]["southwest"]["lng"],
+              leg["start_location"]["lat"],
+              leg["start_location"]["lng"],
             ),
-          );
-
-          final legs = <Leg>[];
-
-          for (final leg in route["legs"]) {
-            legs.add(Leg(
-              leg["distance"]["value"],
-              leg["distance"]["text"],
-              Duration(seconds: leg["duration"]["value"]),
-              leg["duration"]["text"],
-              leg["end_address"],
-              PointLatLng(
-                leg["end_location"]["lat"],
-                leg["end_location"]["lng"],
-              ),
-              leg["start_address"],
-              PointLatLng(
-                leg["start_location"]["lat"],
-                leg["start_location"]["lng"],
-              ),
-            ));
-          }
-
-          final points = decodeEncodedPolyline(
-            route["overview_polyline"]["points"],
-          );
-
-          routes.add(Route(bounds, legs, points));
+          ));
         }
-        result.routes = routes;
-      } else {
-        result.errorMessage = parsedJson["error_message"];
+
+        final points = decodeEncodedPolyline(
+          route["overview_polyline"]["points"],
+        );
+
+        routes.add(Route(bounds, legs, points));
       }
+      result.routes = routes;
+    } else {
+      result.errorMessage = parsedJson["error_message"];
     }
     return result;
   }

@@ -49,6 +49,14 @@ class PolylinePoints {
     );
   }
 
+  /// Decode the json body returned by the Directions API.
+  /// 
+  /// This is useful if you want to call the API on your own server
+  /// instead of on the client.
+  PolylineResult parseJson(dynamic json) {
+    return util.parseJson(json);
+  }
+
   /// Decode and encoded google polyline
   /// e.g "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
   ///
