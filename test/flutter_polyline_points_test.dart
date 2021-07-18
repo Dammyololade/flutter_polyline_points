@@ -8,10 +8,12 @@ void main() {
   test('get list of coordinates from two geographical positions', () async {
     final polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        Constants.API_KEY, PointLatLng(6.5212402, 3.3679965),
-        PointLatLng(6.595680, 3.337030),
-        travelMode: TravelMode.driving);
-    assert(result.points.isNotEmpty == true);
+      Constants.API_KEY,
+      origin: PointLatLng(6.5212402, 3.3679965),
+      destination: PointLatLng(6.595680, 3.337030),
+      travelMode: TravelMode.driving,
+    );
+    assert(result.routes.first.points.isNotEmpty == true);
   });
 
   test('get list of coordinates from an encoded String', () {
