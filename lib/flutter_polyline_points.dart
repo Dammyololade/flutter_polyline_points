@@ -24,9 +24,11 @@ class PolylinePoints {
   /// which can be used to draw polyline between this two positions
   ///
   Future<PolylineResult> getRouteBetweenCoordinates(
-    String googleApiKey,
-    PointLatLng origin,
-    PointLatLng destination, {
+    String googleApiKey, {
+    PointLatLng? origin,
+    PointLatLng? destination,
+    String? originPlaceId,
+    String? destinationPlaceId,
     TravelMode travelMode = TravelMode.driving,
     List<PolylineWayPoint> wayPoints = const [],
     bool avoidHighways = false,
@@ -35,10 +37,20 @@ class PolylinePoints {
     bool optimizeWaypoints = false,
     bool alternatives = false,
   }) {
+    assert(
+      (origin != null || originPlaceId != null),
+      "origin or originPlaceId must be specified",
+    );
+    assert(
+      (destination != null || destinationPlaceId != null),
+      "destination or destinationPlaceId must be specified",
+    );
     return util.getRouteBetweenCoordinates(
       googleApiKey,
       origin,
       destination,
+      originPlaceId,
+      destinationPlaceId,
       travelMode,
       wayPoints,
       avoidHighways,
@@ -50,7 +62,7 @@ class PolylinePoints {
   }
 
   /// Decode the json body returned by the Directions API.
-  /// 
+  ///
   /// This is useful if you want to call the API on your own server
   /// instead of on the client.
   PolylineResult parseJson(dynamic json) {

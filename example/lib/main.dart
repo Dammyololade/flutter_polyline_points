@@ -100,8 +100,8 @@ class _MapScreenState extends State<MapScreen> {
   _getPolyline() async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleAPiKey,
-        PointLatLng(_originLatitude, _originLongitude),
-        PointLatLng(_destLatitude, _destLongitude),
+        origin: PointLatLng(_originLatitude, _originLongitude),
+        destination: PointLatLng(_destLatitude, _destLongitude),
         travelMode: TravelMode.driving,
         wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]);
     if (result.routes[0].points.isNotEmpty) {

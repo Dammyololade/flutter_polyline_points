@@ -16,8 +16,10 @@ class NetworkUtil {
   ///
   Future<PolylineResult> getRouteBetweenCoordinates(
     String googleApiKey,
-    PointLatLng origin,
-    PointLatLng destination,
+    PointLatLng? origin,
+    PointLatLng? destination,
+    String? originPlaceId,
+    String? destinationPlaceId,
     TravelMode travelMode,
     List<PolylineWayPoint> wayPoints,
     bool avoidHighways,
@@ -26,16 +28,28 @@ class NetworkUtil {
     bool optimizeWaypoints,
     bool alternatives,
   ) async {
+   
     final mode = travelMode.toString().replaceAll('TravelMode.', '');
     final result = PolylineResult();
 
     final params = {
-      "origin": "${origin.latitude},${origin.longitude}",
-      "destination": "${destination.latitude},${destination.longitude}",
       "mode": mode,
       "alternatives": "$alternatives",
       "key": googleApiKey
     };
+
+    if (origin != null) {
+      params["origin"] = "${origin.latitude},${origin.longitude}";
+    } else {
+      params["origin"] = 'place_id:${originPlaceId!}';
+    }
+
+    if (destination != null) {
+      params["destination"] =
+          "${destination.latitude},${destination.longitude}";
+    } else {
+      params["destination"] = 'place_id:${destinationPlaceId!}';
+    }
 
     if (wayPoints.isNotEmpty) {
       final wayPointsArray = wayPoints.map((point) => point.location);
@@ -54,7 +68,6 @@ class NetworkUtil {
     Uri uri =
         Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
 
-    // print('GOOGLE MAPS URL: ' + url);
     var response = await http.get(uri);
     if (response.statusCode == 200) {
       var parsedJson = json.decode(response.body);
