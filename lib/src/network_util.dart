@@ -34,7 +34,7 @@ class NetworkUtil {
       result.status = parsedJson["status"];
       if (parsedJson["status"]?.toLowerCase() == STATUS_OK && parsedJson["routes"] != null && parsedJson["routes"].isNotEmpty) {
         result.points = decodeEncodedPolyline(parsedJson["routes"][0]["overview_polyline"]["points"]);
-        result.distanceText = parsedJson["routes"][0]["overview_polyline"]["points"];
+        result.overviewPolyline = parsedJson["routes"][0]["overview_polyline"]["points"];
         result.distanceText = parsedJson["routes"][0]["legs"][0]['distance']['text'];
         result.distanceValue = parsedJson["routes"][0]["legs"][0]['distance']['value'];
         result.durationText = parsedJson["routes"][0]["legs"][0]['duration']['text'];
