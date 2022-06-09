@@ -34,7 +34,7 @@ class NetworkUtil {
       "avoidFerries": "$avoidFerries",
       "avoidTolls": "$avoidTolls",
       "key": googleApiKey,
-      "alternatives": "$alternative"
+      "provideRouteAlternatives": "$alternative"
     };
     if (wayPoints.isNotEmpty) {
       List wayPointsArray = [];
