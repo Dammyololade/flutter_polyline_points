@@ -13,15 +13,17 @@ class NetworkUtil {
   ///Get the encoded string from google directions api
   ///
   Future<PolylineResult> getRouteBetweenCoordinates(
-      String googleApiKey,
-      PointLatLng origin,
-      PointLatLng destination,
-      TravelMode travelMode,
-      List<PolylineWayPoint> wayPoints,
-      bool avoidHighways,
-      bool avoidTolls,
-      bool avoidFerries,
-      bool optimizeWaypoints) async {
+    String googleApiKey,
+    PointLatLng origin,
+    PointLatLng destination,
+    TravelMode travelMode,
+    List<PolylineWayPoint> wayPoints,
+    bool avoidHighways,
+    bool avoidTolls,
+    bool avoidFerries,
+    bool optimizeWaypoints,
+    bool alternative,
+  ) async {
     String mode = travelMode.toString().replaceAll('TravelMode.', '');
     PolylineResult result = PolylineResult();
     var params = {
@@ -31,7 +33,8 @@ class NetworkUtil {
       "avoidHighways": "$avoidHighways",
       "avoidFerries": "$avoidFerries",
       "avoidTolls": "$avoidTolls",
-      "key": googleApiKey
+      "key": googleApiKey,
+      "alternatives": "$alternative"
     };
     if (wayPoints.isNotEmpty) {
       List wayPointsArray = [];
