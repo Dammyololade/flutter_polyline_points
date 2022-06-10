@@ -18,7 +18,7 @@ class PolylinePoints {
   /// Get the list of coordinates between two geographical positions
   /// which can be used to draw polyline between this two positions
   ///
-  Future<PolylineResult> getRouteBetweenCoordinates(
+  Future<List<PolylineResult>> getRouteBetweenCoordinates(
       String googleApiKey, PointLatLng origin, PointLatLng destination,
       {TravelMode travelMode = TravelMode.driving,
       List<PolylineWayPoint> wayPoints = const [],

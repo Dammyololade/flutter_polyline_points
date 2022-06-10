@@ -12,7 +12,7 @@ class NetworkUtil {
 
   ///Get the encoded string from google directions api
   ///
-  Future<PolylineResult> getRouteBetweenCoordinates(
+  Future<List<PolylineResult>> getRouteBetweenCoordinates(
     String googleApiKey,
     PointLatLng origin,
     PointLatLng destination,
@@ -26,6 +26,7 @@ class NetworkUtil {
   ) async {
     String mode = travelMode.toString().replaceAll('TravelMode.', '');
     PolylineResult result = PolylineResult();
+    List<PolylineResult> resultList = [];
     var params = {
       "origin": "${origin.latitude},${origin.longitude}",
       "destination": "${destination.latitude},${destination.longitude}",
@@ -52,17 +53,25 @@ class NetworkUtil {
     var response = await http.get(uri);
     if (response.statusCode == 200) {
       var parsedJson = json.decode(response.body);
-      result.status = parsedJson["status"];
+      // result.status = parsedJson["status"];
       if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
           parsedJson["routes"] != null &&
           parsedJson["routes"].isNotEmpty) {
-        result.points = decodeEncodedPolyline(
-            parsedJson["routes"][0]["overview_polyline"]["points"]);
+        List<dynamic> routeList = parsedJson["routes"];
+        for (var route in routeList) {
+          resultList.add(PolylineResult(
+              points:
+                  decodeEncodedPolyline(route["overview_polyline"]["points"]),
+              errorMessage: "",
+              status: parsedJson["status"]));
+        }
+        // result.points = decodeEncodedPolyline(
+        //     parsedJson["routes"][0]["overview_polyline"]["points"]);
       } else {
         result.errorMessage = parsedJson["error_message"];
       }
     }
-    return result;
+    return resultList;
   }
 
   ///decode the google encoded string using Encoded Polyline Algorithm Format

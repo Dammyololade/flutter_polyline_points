@@ -43,7 +43,7 @@ class _MapScreenState extends State<MapScreen> {
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
-  String googleAPiKey = "Please provide your api key";
+  String googleAPiKey = "AIzaSyDCDns1GWUut06q06vFs9pa75uZK_6-4LQ";
 
   @override
   void initState() {
@@ -98,17 +98,24 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   _getPolyline() async {
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        googleAPiKey,
-        PointLatLng(_originLatitude, _originLongitude),
-        PointLatLng(_destLatitude, _destLongitude),
-        travelMode: TravelMode.driving,
-        wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]);
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
+    // PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+    // googleAPiKey,
+    //     PointLatLng(_originLatitude, _originLongitude),
+    //     PointLatLng(_destLatitude, _destLongitude),
+    //     travelMode: TravelMode.driving,
+    //     wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]);
+
+    List<PolylineResult> result =
+        await polylinePoints.getRouteBetweenCoordinates(googleAPiKey,
+            PointLatLng(6.5212402, 3.3679965), PointLatLng(6.595680, 3.337030),
+            alternative: true, travelMode: TravelMode.driving);
+    if (result.isNotEmpty) {
+      for (var item in result) {
+        item.points.forEach((PointLatLng point) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+          _addPolyLine();
+        });
+      }
     }
-    _addPolyLine();
   }
 }
