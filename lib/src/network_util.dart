@@ -58,12 +58,15 @@ class NetworkUtil {
           parsedJson["routes"] != null &&
           parsedJson["routes"].isNotEmpty) {
         List<dynamic> routeList = parsedJson["routes"];
+
         for (var route in routeList) {
           resultList.add(PolylineResult(
               points:
                   decodeEncodedPolyline(route["overview_polyline"]["points"]),
               errorMessage: "",
-              status: parsedJson["status"]));
+              status: parsedJson["status"],
+              distance: route["legs"][0]["distance"]["text"],
+              duration: route["legs"][0]["duration"]["text"]));
         }
         // result.points = decodeEncodedPolyline(
         //     parsedJson["routes"][0]["overview_polyline"]["points"]);
