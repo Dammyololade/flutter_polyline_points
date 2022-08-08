@@ -50,7 +50,6 @@ class NetworkUtil {
     //String url = uri.toString();
     // print('GOOGLE MAPS URL: ' + url);
     Dio dio = Dio();
-    print("Hello :)");
     var response = await dio.get(uri.toString(),
         options: Options(headers: {
           "Access-Control-Allow-Origin": "*",
@@ -62,7 +61,7 @@ class NetworkUtil {
           "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
         }));
     if (response.statusCode == 200) {
-      var parsedJson = json.decode(response.data as String);
+      var parsedJson = response.data;
       result.status = parsedJson["status"];
       if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
           parsedJson["routes"] != null &&
