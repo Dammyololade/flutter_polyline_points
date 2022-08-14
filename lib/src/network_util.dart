@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import '../src/utils/polyline_waypoint.dart';
 import '../src/utils/request_enums.dart';
 import '../src/PointLatLng.dart';
-import 'package:http/http.dart' as http;
 
 import 'utils/polyline_result.dart';
 
@@ -15,6 +14,8 @@ class NetworkUtil {
   ///Get the encoded string from google directions api
   ///
   Future<PolylineResult> getRouteBetweenCoordinates(
+      Future<String> Function(String url, Map<String, String> headers)
+          requestProxy,
       String googleApiKey,
       PointLatLng origin,
       PointLatLng destination,
@@ -35,6 +36,7 @@ class NetworkUtil {
       "avoidTolls": "$avoidTolls",
       "key": googleApiKey
     };
+
     if (wayPoints.isNotEmpty) {
       List wayPointsArray = [];
       wayPoints.forEach((point) => wayPointsArray.add(point.location));
@@ -49,29 +51,27 @@ class NetworkUtil {
 
     //String url = uri.toString();
     // print('GOOGLE MAPS URL: ' + url);
-    Dio dio = Dio();
-    var response = await dio.get(uri.toString(),
-        options: Options(headers: {
-          "Access-Control-Allow-Origin": "*",
-          // Required for CORS support to work
-          "Access-Control-Allow-Credentials": true,
-          // Required for cookies, authorization headers with HTTPS
-          "Access-Control-Allow-Headers":
-              "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
-          "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
-        }));
-    if (response.statusCode == 200) {
-      var parsedJson = response.data;
-      result.status = parsedJson["status"];
-      if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
-          parsedJson["routes"] != null &&
-          parsedJson["routes"].isNotEmpty) {
-        result.points = decodeEncodedPolyline(
-            parsedJson["routes"][0]["overview_polyline"]["points"]);
-      } else {
-        result.errorMessage = parsedJson["error_message"];
-      }
+    var response = await requestProxy(uri.toString(), {
+      "Access-Control-Allow-Origin": "*",
+      // Required for CORS support to work
+      "Access-Control-Allow-Credentials": true,
+      // Required for cookies, authorization headers with HTTPS
+      "Access-Control-Allow-Headers":
+          "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+      "Access-Control-Allow-Methods": "POST, GET, OPTIONS"
+    });
+
+    var parsedJson = jsonDecode(response);
+    result.status = parsedJson["status"];
+    if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
+        parsedJson["routes"] != null &&
+        parsedJson["routes"].isNotEmpty) {
+      result.points = decodeEncodedPolyline(
+          parsedJson["routes"][0]["overview_polyline"]["points"]);
+    } else {
+      result.errorMessage = parsedJson["error_message"];
     }
+
     return result;
   }
 

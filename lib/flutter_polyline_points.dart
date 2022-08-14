@@ -20,13 +20,16 @@ class PolylinePoints {
   ///
   Future<PolylineResult> getRouteBetweenCoordinates(
       String googleApiKey, PointLatLng origin, PointLatLng destination,
-      {TravelMode travelMode = TravelMode.driving,
+      {required Future<String> Function(String url, Map<String, String> headers)
+          requestProxy,
+      TravelMode travelMode = TravelMode.driving,
       List<PolylineWayPoint> wayPoints = const [],
       bool avoidHighways = false,
       bool avoidTolls = false,
       bool avoidFerries = true,
       bool optimizeWaypoints = false}) async {
     return await util.getRouteBetweenCoordinates(
+        requestProxy,
         googleApiKey,
         origin,
         destination,
