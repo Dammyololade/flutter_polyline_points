@@ -6,6 +6,8 @@ import '../src/PointLatLng.dart';
 import '../src/utils/polyline_waypoint.dart';
 import '../src/utils/request_enums.dart';
 import 'utils/polyline_result.dart';
+import 'utils/trip_distance.dart';
+import 'utils/trip_duration.dart';
 
 class NetworkUtil {
   static const String STATUS_OK = "ok";
@@ -55,6 +57,12 @@ class NetworkUtil {
           parsedJson["routes"].isNotEmpty) {
         result.points = decodeEncodedPolyline(
             parsedJson["routes"][0]["overview_polyline"]["points"]);
+        result.distance = TripDistance(
+            parsedJson["routes"][0]["legs"][0]["distance"]["text"],
+            parsedJson["routes"][0]["legs"][0]["distance"]["value"]);
+        result.duration = TripDuration(
+            parsedJson["routes"][0]["legs"][0]["duration"]["text"],
+            parsedJson["routes"][0]["legs"][0]["duration"]["value"]);
       } else {
         result.errorMessage = parsedJson["error_message"];
       }
