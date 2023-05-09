@@ -54,7 +54,7 @@ class NetworkUtil {
           parsedJson["routes"] != null &&
           parsedJson["routes"].isNotEmpty) {
         result.points = decodeEncodedPolyline(
-            parsedJson["routes"][0]["overview_polyline"]["points"]);
+            parsedJson["routes"]);
       } else {
         result.errorMessage = parsedJson["error_message"];
       }
