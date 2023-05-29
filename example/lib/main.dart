@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,7 +33,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  GoogleMapController mapController;
+  late GoogleMapController mapController;
   // double _originLatitude = 6.5212402, _originLongitude = 3.3679965;
   // double _destLatitude = 6.849660, _destLongitude = 3.648190;
   double _originLatitude = 26.48424, _originLongitude = 50.04551;
