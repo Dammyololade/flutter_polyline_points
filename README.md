@@ -37,6 +37,14 @@ List<PointLatLng> result = polylinePoints.decodePolyline("_p~iF~ps|U_ulLnnqC_mqN
 print(result);
 ``` 
 
+## Third method
+Fetch polyline with alternative routes. This method returns a list of PolylineResult
+```dart
+List<PolylineResult> resulte = await PolylinePoints().getRouteWithAlternatives(googleAPiKey,
+        _originLatitude, _originLongitude, _destLatitude, _destLongitude);
+print(results.length);
+```
+
 See the example directory for a complete sample app
 
 ## Hint
