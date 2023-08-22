@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter_polyline_points/src/PointLatLng.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_decoder.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_request.dart';
 import 'package:http/http.dart' as http;

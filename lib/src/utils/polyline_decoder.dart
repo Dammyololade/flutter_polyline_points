@@ -8,19 +8,19 @@ class PolylineDecoder {
     List<PointLatLng> points = [];
     int index = 0, len = encoded.length;
     int lat = 0, lng = 0;
-    BigInt Big0 = BigInt.from(0);
-    BigInt Big0x1f = BigInt.from(0x1f);
-    BigInt Big0x20 = BigInt.from(0x20);
+    BigInt big0 = BigInt.from(0);
+    BigInt big0x1f = BigInt.from(0x1f);
+    BigInt big0x20 = BigInt.from(0x20);
 
     while (index < len) {
       int shift = 0;
       BigInt b, result;
-      result = Big0;
+      result = big0;
       do {
         b = BigInt.from(encoded.codeUnitAt(index++) - 63);
-        result |= (b & Big0x1f) << shift;
+        result |= (b & big0x1f) << shift;
         shift += 5;
-      } while (b >= Big0x20);
+      } while (b >= big0x20);
       BigInt rShifted = result >> 1;
       int dLat;
       if (result.isOdd)
@@ -30,12 +30,12 @@ class PolylineDecoder {
       lat += dLat;
 
       shift = 0;
-      result = Big0;
+      result = big0;
       do {
         b = BigInt.from(encoded.codeUnitAt(index++) - 63);
-        result |= (b & Big0x1f) << shift;
+        result |= (b & big0x1f) << shift;
         shift += 5;
-      } while (b >= Big0x20);
+      } while (b >= big0x20);
       rShifted = result >> 1;
       int dLng;
       if (result.isOdd)
