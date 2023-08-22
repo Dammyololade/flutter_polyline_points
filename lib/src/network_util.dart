@@ -1,10 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter_polyline_points/src/PointLatLng.dart';
+import 'package:flutter_polyline_points/src/utils/polyline_request.dart';
 import 'package:http/http.dart' as http;
-
-import '../src/PointLatLng.dart';
-import '../src/utils/polyline_waypoint.dart';
-import '../src/utils/request_enums.dart';
 import 'utils/polyline_result.dart';
 
 class NetworkUtil {
@@ -12,54 +10,31 @@ class NetworkUtil {
 
   ///Get the encoded string from google directions api
   ///
-  Future<PolylineResult> getRouteBetweenCoordinates(
-      String googleApiKey,
-      PointLatLng origin,
-      PointLatLng destination,
-      TravelMode travelMode,
-      List<PolylineWayPoint> wayPoints,
-      bool avoidHighways,
-      bool avoidTolls,
-      bool avoidFerries,
-      bool optimizeWaypoints) async {
-    String mode = travelMode.toString().replaceAll('TravelMode.', '');
-    PolylineResult result = PolylineResult();
-    var params = {
-      "origin": "${origin.latitude},${origin.longitude}",
-      "destination": "${destination.latitude},${destination.longitude}",
-      "mode": mode,
-      "avoidHighways": "$avoidHighways",
-      "avoidFerries": "$avoidFerries",
-      "avoidTolls": "$avoidTolls",
-      "key": googleApiKey
-    };
-    if (wayPoints.isNotEmpty) {
-      List wayPointsArray = [];
-      wayPoints.forEach((point) => wayPointsArray.add(point.location));
-      String wayPointsString = wayPointsArray.join('|');
-      if (optimizeWaypoints) {
-        wayPointsString = 'optimize:true|$wayPointsString';
-      }
-      params.addAll({"waypoints": wayPointsString});
-    }
-    Uri uri =
-        Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
+  Future<List<PolylineResult>> getRouteBetweenCoordinates(
+      {required PolylineRequest request}) async {
+    List<PolylineResult> results = [];
 
-    // print('GOOGLE MAPS URL: ' + url);
-    var response = await http.get(uri);
+    var response = await http.get(request.toUri());
     if (response.statusCode == 200) {
       var parsedJson = json.decode(response.body);
-      result.status = parsedJson["status"];
       if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
           parsedJson["routes"] != null &&
           parsedJson["routes"].isNotEmpty) {
-        result.points = decodeEncodedPolyline(
-            parsedJson["routes"][0]["overview_polyline"]["points"]);
+        List<dynamic> routeList = parsedJson["routes"];
+        for (var route in routeList) {
+          results.add(PolylineResult(
+              points:
+                  decodeEncodedPolyline(route["overview_polyline"]["points"]),
+              errorMessage: "",
+              status: parsedJson["status"],
+              distance: route["legs"][0]["distance"]["text"],
+              duration: route["legs"][0]["duration"]["text"]));
+        }
       } else {
-        result.errorMessage = parsedJson["error_message"];
+        throw Exception("Unable to get route: Response ---> ${parsedJson["status"]} ");
       }
     }
-    return result;
+    return results;
   }
 
   ///decode the google encoded string using Encoded Polyline Algorithm Format
