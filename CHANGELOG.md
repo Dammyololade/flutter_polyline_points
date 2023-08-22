@@ -1,3 +1,10 @@
+## [2.0.0] - 16-04-2021
+Updated dependencies and added some new functionalities such as:
+- Fetching alternative routes
+- Optimised algorithm for web
+Special thanks to this contibutors for landing such huge PRs:
+- [@nnadir35](https://github.com/nnadir35)
+- [@shkvoretz](https://github.com/shkvoretz)
 ## [1.0.0] - 16-04-2021
 Released a null safety version
 ## [0.2.6] - 07-03-2021

@@ -1,5 +1,6 @@
 library flutter_polyline_points;
 
+import 'package:flutter_polyline_points/src/utils/polyline_decoder.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_request.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_result.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_waypoint.dart';
@@ -48,6 +49,8 @@ class PolylinePoints {
     }
   }
 
+  /// Get the list of coordinates between two geographical positions with
+  /// alternative routes which can be used to draw polyline between this two positions
   Future<List<PolylineResult>> getRouteWithAlternatives(
       {required PolylineRequest request}) async {
     assert(request.apiKey.isNotEmpty, "Google API Key cannot be empty");
@@ -64,6 +67,6 @@ class PolylinePoints {
   /// e.g "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
   ///
   List<PointLatLng> decodePolyline(String encodedString) {
-    return NetworkUtil().decodeEncodedPolyline(encodedString);
+    return PolylineDecoder.run(encodedString);
   }
 }

@@ -24,11 +24,26 @@ class PolylineResult {
   /// list of decoded points
   List<PointLatLng> alternatives;
 
+  String? distanceText;
+  int? distanceValue;
+  String? durationText;
+  int? durationValue;
+  String? endAddress;
+  String? startAddress;
+  String? overviewPolyline;
+
   PolylineResult(
       {this.status,
       this.points = const [],
       this.distance,
       this.duration,
       this.alternatives = const [],
-      this.errorMessage = ""});
+      this.errorMessage = "",
+      this.distanceText,
+      this.distanceValue,
+      this.durationText,
+      this.durationValue,
+      this.endAddress,
+      this.startAddress,
+      this.overviewPolyline});
 }
