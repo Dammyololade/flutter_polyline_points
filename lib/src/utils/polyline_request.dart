@@ -36,10 +36,12 @@ class PolylineRequest {
   /// or [departureTime], but not both. Note that it must be specified as an integer.
   final int? arrivalTime;
 
-
   /// Specifies the desired time of departure. You can specify the time as
   /// an integer in seconds since midnight,
   final int? departureTime;
+
+  /// If this value is not empty, then the request will be sent to the proxy
+  final String? proxyUrl;
 
   PolylineRequest({
     required this.apiKey,
@@ -55,6 +57,7 @@ class PolylineRequest {
     this.arrivalTime,
     this.departureTime,
     this.transitMode,
+    this.proxyUrl,
   });
 
   void validateKey(String key) {
@@ -87,7 +90,15 @@ class PolylineRequest {
       }
       params.addAll({"waypoints": wayPointsString});
     }
-    return Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
+
+    final uri = Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
+
+    //Add proxyUrl to the beginning of the URI
+    if (proxyUrl != null) {
+      return Uri.parse(proxyUrl! + uri.toString());
+    }
+
+    return uri;
   }
 
   Map<String, dynamic> removeNulls(Map<String, dynamic> map) {
