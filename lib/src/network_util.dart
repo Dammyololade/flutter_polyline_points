@@ -23,20 +23,31 @@ class NetworkUtil {
         List<dynamic> routeList = parsedJson["routes"];
         for (var route in routeList) {
           results.add(PolylineResult(
-              points:
-                  PolylineDecoder.run(route["overview_polyline"]["points"]),
-              errorMessage: "",
-              status: parsedJson["status"],
-              distance: route["legs"][0]["distance"]["text"],
-              distanceValue: route["legs"][0]["distance"]["value"],
-              overviewPolyline: route["overview_polyline"]["points"],
-              durationValue: route["legs"][0]["duration"]["value"],
-              endAddress: route["legs"][0]['end_address'],
-              startAddress: route["legs"][0]['start_address'],
-              duration: route["legs"][0]["duration"]["text"]));
+            points: PolylineDecoder.run(route["overview_polyline"]["points"]),
+            errorMessage: "",
+            status: parsedJson["status"],
+            totalDistanceValue: route['legs']
+                .map((leg) => leg['distance']['value'])
+                .reduce((v1, v2) => v1 + v2),
+            distanceTexts:
+                route['legs'].map((leg) => leg['distance']['text']).toList(),
+            distanceValues:
+                route['legs'].map((leg) => leg['distance']['value']).toList(),
+            overviewPolyline: route["overview_polyline"]["points"],
+            totalDurationValue: route['legs']
+                .map((leg) => leg['duration']['value'])
+                .reduce((v1, v2) => v1 + v2),
+            durationTexts:
+                route['legs'].map((leg) => leg['duration']['text']).toList(),
+            durationValues:
+                route['legs'].map((leg) => leg['distance']['value']).toList(),
+            endAddress: route["legs"].last['end_address'],
+            startAddress: route["legs"].first['start_address'],
+          ));
         }
       } else {
-        throw Exception("Unable to get route: Response ---> ${parsedJson["status"]} ");
+        throw Exception(
+            "Unable to get route: Response ---> ${parsedJson["status"]} ");
       }
     }
     return results;
