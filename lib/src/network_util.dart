@@ -29,18 +29,22 @@ class NetworkUtil {
             totalDistanceValue: route['legs']
                 .map((leg) => leg['distance']['value'])
                 .reduce((v1, v2) => v1 + v2),
-            distanceTexts:
-                route['legs'].map((leg) => leg['distance']['text']).toList(),
-            distanceValues:
-                route['legs'].map((leg) => leg['distance']['value']).toList(),
+            distanceTexts: <String>[
+              route['legs'].map((leg) => leg['distance']['value'])
+            ],
+            distanceValues: <int>[
+              route['legs'].map((leg) => leg['distance']['value'])
+            ],
             overviewPolyline: route["overview_polyline"]["points"],
             totalDurationValue: route['legs']
                 .map((leg) => leg['duration']['value'])
                 .reduce((v1, v2) => v1 + v2),
-            durationTexts:
-                route['legs'].map((leg) => leg['duration']['text']).toList(),
-            durationValues:
-                route['legs'].map((leg) => leg['distance']['value']).toList(),
+            durationTexts: <String>[
+              route['legs'].map((leg) => leg['duration']['text'])
+            ],
+            durationValues: <int>[
+              route['legs'].map((leg) => leg['distance']['value'])
+            ],
             endAddress: route["legs"].last['end_address'],
             startAddress: route["legs"].first['start_address'],
           ));
