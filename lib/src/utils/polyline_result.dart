@@ -17,17 +17,15 @@ class PolylineResult {
   /// the error message returned from google, if none, the result will be empty
   String? errorMessage;
 
-  String? duration;
-
-  String? distance;
-
   /// list of decoded points
   List<PointLatLng> alternatives;
 
-  String? distanceText;
-  int? distanceValue;
-  String? durationText;
-  int? durationValue;
+  List<String>? distanceTexts;
+  List<int>? distanceValues;
+  int? totalDistanceValue;
+  List<String>? durationTexts;
+  List<int>? durationValues;
+  int? totalDurationValue;
   String? endAddress;
   String? startAddress;
   String? overviewPolyline;
@@ -35,14 +33,14 @@ class PolylineResult {
   PolylineResult(
       {this.status,
       this.points = const [],
-      this.distance,
-      this.duration,
-      this.alternatives = const [],
       this.errorMessage = "",
-      this.distanceText,
-      this.distanceValue,
-      this.durationText,
-      this.durationValue,
+      this.alternatives = const [],
+      this.distanceTexts,
+      this.distanceValues,
+      this.totalDistanceValue,
+      this.durationTexts,
+      this.durationValues,
+      this.totalDurationValue,
       this.endAddress,
       this.startAddress,
       this.overviewPolyline});
