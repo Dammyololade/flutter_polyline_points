@@ -43,7 +43,7 @@ class NetworkUtil {
               ...route['legs'].map((leg) => leg['duration']['text'])
             ],
             durationValues: <int>[
-              ...route['legs'].map((leg) => leg['distance']['value'])
+              ...route['legs'].map((leg) => leg['duration']['value'])
             ],
             endAddress: route["legs"].last['end_address'],
             startAddress: route["legs"].first['start_address'],
