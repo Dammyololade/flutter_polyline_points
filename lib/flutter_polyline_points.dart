@@ -3,46 +3,30 @@ library flutter_polyline_points;
 import 'package:flutter_polyline_points/src/utils/polyline_decoder.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_request.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_result.dart';
-import 'package:flutter_polyline_points/src/utils/polyline_waypoint.dart';
-import 'package:flutter_polyline_points/src/utils/request_enums.dart';
-import 'src/PointLatLng.dart';
-import 'src/network_util.dart';
 
-export 'src/utils/request_enums.dart';
-export 'src/utils/polyline_waypoint.dart';
+import 'src/network_util.dart';
+import 'src/point_lat_lng.dart';
+
 export 'src/network_util.dart';
-export 'src/PointLatLng.dart';
-export 'src/utils/polyline_result.dart';
+export 'src/point_lat_lng.dart';
 export 'src/utils/polyline_request.dart';
+export 'src/utils/polyline_result.dart';
 
 class PolylinePoints {
   /// Get the list of coordinates between two geographical positions
   /// which can be used to draw polyline between this two positions
   ///
   Future<PolylineResult> getRouteBetweenCoordinates(
-      {required String googleApiKey,
-      required PointLatLng origin,
-      required PointLatLng destination,
-      TravelMode travelMode = TravelMode.driving,
-      List<PolylineWayPoint> wayPoints = const [],
-      bool avoidHighways = false,
-      bool avoidTolls = false,
-      bool avoidFerries = true,
-      bool optimizeWaypoints = false}) async {
-    assert(googleApiKey.isNotEmpty, "Google API Key cannot be empty");
+      {required PolylineRequest request, String? googleApiKey}) async {
+    assert(
+        (request.proxy == null &&
+                googleApiKey != null &&
+                googleApiKey.isNotEmpty) ||
+            (request.proxy != null && googleApiKey == null),
+        "Google API Key cannot be empty if proxy isn't provided");
     try {
-      var result = await NetworkUtil().getRouteBetweenCoordinates(
-          request: PolylineRequest(
-              apiKey: googleApiKey,
-              origin: origin,
-              destination: destination,
-              mode: travelMode,
-              wayPoints: wayPoints,
-              avoidHighways: avoidHighways,
-              avoidTolls: avoidTolls,
-              avoidFerries: avoidFerries,
-              alternatives: false,
-              optimizeWaypoints: optimizeWaypoints));
+      var result =
+          await NetworkUtil().getRouteBetweenCoordinates(request: request);
       return result.isNotEmpty
           ? result[0]
           : PolylineResult(errorMessage: "No result found");
@@ -54,8 +38,13 @@ class PolylinePoints {
   /// Get the list of coordinates between two geographical positions with
   /// alternative routes which can be used to draw polyline between this two positions
   Future<List<PolylineResult>> getRouteWithAlternatives(
-      {required PolylineRequest request}) async {
-    assert(request.apiKey.isNotEmpty, "Google API Key cannot be empty");
+      {required PolylineRequest request, String? googleApiKey}) async {
+    assert(
+        (request.proxy == null &&
+                googleApiKey != null &&
+                googleApiKey.isNotEmpty) ||
+            (request.proxy != null && googleApiKey == null),
+        "Google API Key cannot be empty if proxy isn't provided");
     assert(request.arrivalTime == null || request.departureTime == null,
         "You can only specify either arrival time or departure time");
     try {

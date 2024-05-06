@@ -1,4 +1,4 @@
-import 'package:flutter_polyline_points/src/PointLatLng.dart';
+import 'package:flutter_polyline_points/src/point_lat_lng.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_waypoint.dart';
 import 'package:flutter_polyline_points/src/utils/request_enums.dart';
 
@@ -6,7 +6,6 @@ class PolylineRequest {
   final PointLatLng origin;
   final PointLatLng destination;
   final TravelMode mode;
-  final String apiKey;
   final List<PolylineWayPoint> wayPoints;
   final bool avoidHighways;
   final bool avoidTolls;
@@ -36,13 +35,17 @@ class PolylineRequest {
   /// or [departureTime], but not both. Note that it must be specified as an integer.
   final int? arrivalTime;
 
-
   /// Specifies the desired time of departure. You can specify the time as
   /// an integer in seconds since midnight,
   final int? departureTime;
 
+  final Uri? proxy;
+
+  final Map<String, String>? headers;
+
   PolylineRequest({
-    required this.apiKey,
+    this.proxy,
+    this.headers,
     required this.origin,
     required this.destination,
     required this.mode,
@@ -57,14 +60,13 @@ class PolylineRequest {
     this.transitMode,
   });
 
-  void validateKey(String key) {
-    if (key.isEmpty) {
-      throw ArgumentError("API Key cannot empty");
+  void validateKey(String? key) {
+    if (key != null && key.isEmpty) {
+      throw ArgumentError("API Key cannot empty or null");
     }
   }
 
-  Uri toUri() {
-    validateKey(apiKey);
+  Map<String, dynamic> _getParams() {
     var params = removeNulls({
       "origin": "${origin.latitude},${origin.longitude}",
       "destination": "${destination.latitude},${destination.longitude}",
@@ -73,7 +75,6 @@ class PolylineRequest {
       "avoidFerries": "$avoidFerries",
       "avoidTolls": "$avoidTolls",
       "alternatives": "$alternatives",
-      "key": apiKey,
       "arrival_time": arrivalTime,
       "departure_time": departureTime,
       "transit_mode": transitMode
@@ -87,7 +88,28 @@ class PolylineRequest {
       }
       params.addAll({"waypoints": wayPointsString});
     }
-    return Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
+    return params;
+  }
+
+  Uri toUri({String? apiKey}) {
+    validateKey(apiKey);
+
+    if (proxy != null) {
+      return proxy!.replace(
+        queryParameters: _getParams(),
+      );
+    }
+
+    return Uri.https(
+      "maps.googleapis.com",
+      "maps/api/directions/json",
+      _getParams()
+        ..addAll(
+          {
+            'key': apiKey,
+          },
+        ),
+    );
   }
 
   Map<String, dynamic> removeNulls(Map<String, dynamic> map) {

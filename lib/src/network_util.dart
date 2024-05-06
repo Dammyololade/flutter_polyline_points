@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_polyline_points/src/utils/polyline_decoder.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_request.dart';
 import 'package:http/http.dart' as http;
+
 import 'utils/polyline_result.dart';
 
 class NetworkUtil {
@@ -11,10 +12,13 @@ class NetworkUtil {
   ///Get the encoded string from google directions api
   ///
   Future<List<PolylineResult>> getRouteBetweenCoordinates(
-      {required PolylineRequest request}) async {
+      {required PolylineRequest request, String? googleApiKey}) async {
     List<PolylineResult> results = [];
 
-    var response = await http.get(request.toUri());
+    var response = await http.get(
+      request.toUri(apiKey: googleApiKey),
+      headers: request.headers,
+    );
     if (response.statusCode == 200) {
       var parsedJson = json.decode(response.body);
       if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
