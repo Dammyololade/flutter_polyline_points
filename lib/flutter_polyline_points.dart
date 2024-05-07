@@ -11,6 +11,8 @@ export 'src/network_util.dart';
 export 'src/point_lat_lng.dart';
 export 'src/utils/polyline_request.dart';
 export 'src/utils/polyline_result.dart';
+export 'src/utils/polyline_waypoint.dart';
+export 'src/utils/request_enums.dart';
 
 class PolylinePoints {
   /// Get the list of coordinates between two geographical positions
