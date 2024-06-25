@@ -27,8 +27,8 @@ class PolylinePoints {
             (request.proxy != null && googleApiKey == null),
         "Google API Key cannot be empty if proxy isn't provided");
     try {
-      var result =
-          await NetworkUtil().getRouteBetweenCoordinates(request: request);
+      var result = await NetworkUtil().getRouteBetweenCoordinates(
+          request: request, googleApiKey: googleApiKey);
       return result.isNotEmpty
           ? result[0]
           : PolylineResult(errorMessage: "No result found");
@@ -50,7 +50,7 @@ class PolylinePoints {
     assert(request.arrivalTime == null || request.departureTime == null,
         "You can only specify either arrival time or departure time");
     try {
-      return await NetworkUtil().getRouteBetweenCoordinates(request: request);
+      return await NetworkUtil().getRouteBetweenCoordinates(request: request, googleApiKey: googleApiKey);
     } catch (e) {
       rethrow;
     }
