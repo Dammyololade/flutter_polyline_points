@@ -11,8 +11,10 @@ class NetworkUtil {
 
   ///Get the encoded string from google directions api
   ///
-  Future<List<PolylineResult>> getRouteBetweenCoordinates(
-      {required PolylineRequest request, String? googleApiKey}) async {
+  Future<List<PolylineResult>> getRouteBetweenCoordinates({
+    required PolylineRequest request,
+    String? googleApiKey,
+  }) async {
     List<PolylineResult> results = [];
 
     var response = await http.get(

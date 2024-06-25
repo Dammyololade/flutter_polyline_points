@@ -1,4 +1,10 @@
-## [2.0.0] - 16-04-2021
+## [2.0.1] - 25-06-2024
+- Updated http package
+- Bug fixes and general improvements
+  Special thanks to these contributors:
+- [@tetrix](https://github.com/TetrixGauss)
+- [@fadimanakilci](https://github.com/fadimanakilci)
+## [2.0.0] - 22-08-2023
 Updated dependencies and added some new functionalities such as:
 - Fetching alternative routes
 - Optimised algorithm for web

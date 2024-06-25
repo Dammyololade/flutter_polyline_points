@@ -5,11 +5,14 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 void main() {
   test('get list of coordinates from two geographical positions', () async {
-    final polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        Constants.API_KEY, PointLatLng(6.5212402, 3.3679965),
-        PointLatLng(6.595680, 3.337030),
-        travelMode: TravelMode.driving);
+    final key = Constants.API_KEY;
+    PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
+      request: PolylineRequest(
+          origin: PointLatLng(6.5212402, 3.3679965),
+          destination: PointLatLng(6.595680, 3.337030),
+          mode: TravelMode.driving),
+      googleApiKey: key,
+    );
     assert(result.points.isNotEmpty == true);
   });
 
