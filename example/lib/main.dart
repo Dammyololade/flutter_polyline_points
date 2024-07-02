@@ -99,11 +99,14 @@ class _MapScreenState extends State<MapScreen> {
 
   _getPolyline() async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        googleAPiKey,
-        PointLatLng(_originLatitude, _originLongitude),
-        PointLatLng(_destLatitude, _destLongitude),
-        travelMode: TravelMode.driving,
-        wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]);
+      googleApiKey: googleAPiKey,
+      request: PolylineRequest(
+        origin: PointLatLng(_originLatitude, _originLongitude),
+        destination: PointLatLng(_destLatitude, _destLongitude),
+        mode: TravelMode.driving,
+        wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")],
+      ),
+    );
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
