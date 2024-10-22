@@ -20,7 +20,11 @@ class NetworkUtil {
     var response = await http.get(
       request.toUri(apiKey: googleApiKey),
       headers: request.headers,
+    ).timeout(
+      request.timeoutDuration, 
+      onTimeout: () => throw Exception("Request timed out after the specified duration.")
     );
+    
     if (response.statusCode == 200) {
       var parsedJson = json.decode(response.body);
       if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
