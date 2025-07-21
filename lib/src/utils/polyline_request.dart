@@ -43,6 +43,12 @@ class PolylineRequest {
 
   final Map<String, String>? headers;
 
+  /// The timeout duration defined for this request.
+  /// If no response is received within the specified time, the request will be automatically canceled.
+  /// This helps prevent the app from becoming unresponsive in cases of connection issues or long-running requests.
+  /// The default value is Duration(seconds: 10).
+  final Duration timeoutDuration;
+
   PolylineRequest({
     this.proxy,
     this.headers,
@@ -58,6 +64,7 @@ class PolylineRequest {
     this.arrivalTime,
     this.departureTime,
     this.transitMode,
+    this.timeoutDuration = const Duration(seconds: 10),
   });
 
   void validateKey(String? key) {
