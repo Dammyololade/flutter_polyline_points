@@ -44,4 +44,11 @@ class PolylineResult {
       this.endAddress,
       this.startAddress,
       this.overviewPolyline});
+
+  factory PolylineResult.error(String errorMessage) {
+    return PolylineResult(
+      status: 'error',
+      errorMessage: errorMessage,
+    );
+  }
 }
