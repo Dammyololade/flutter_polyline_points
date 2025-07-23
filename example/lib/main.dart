@@ -3,9 +3,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,24 +16,28 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: MainScreen(),
+      home: const MainScreen(),
     );
   }
 }
 
 class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
   @override
-  _MainScreenState createState() => _MainScreenState();
+  MainScreenState createState() {
+    return MainScreenState();
+  }
 }
 
-class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
+class MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late TabController _tabController;
   String googleApiKey = "YOUR_GOOGLE_API_KEY_HERE"; // Replace with your actual API key
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -44,13 +50,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Polyline Points'),
+        title: const Text('Flutter Polyline Points'),
         bottom: TabBar(
           controller: _tabController,
-          tabs: [
+          tabs: const [
             Tab(text: 'Legacy API', icon: Icon(Icons.route)),
             Tab(text: 'Routes API', icon: Icon(Icons.alt_route)),
             Tab(text: 'Two-Wheeler', icon: Icon(Icons.motorcycle)),
+            Tab(text: 'Headers', icon: Icon(Icons.security)),
           ],
         ),
       ),
@@ -60,6 +67,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           LegacyMapScreen(apiKey: googleApiKey),
           RoutesApiMapScreen(apiKey: googleApiKey),
           TwoWheelerMapScreen(apiKey: googleApiKey),
+          CustomHeadersMapScreen(apiKey: googleApiKey),
         ],
       ),
     );
@@ -70,16 +78,16 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 class LegacyMapScreen extends StatefulWidget {
   final String apiKey;
 
-  const LegacyMapScreen({Key? key, required this.apiKey}) : super(key: key);
+  const LegacyMapScreen({super.key, required this.apiKey});
 
   @override
-  _LegacyMapScreenState createState() => _LegacyMapScreenState();
+  LegacyMapScreenState createState() => LegacyMapScreenState();
 }
 
-class _LegacyMapScreenState extends State<LegacyMapScreen> {
+class LegacyMapScreenState extends State<LegacyMapScreen> {
   late GoogleMapController mapController;
-  double _originLatitude = 6.5212402, _originLongitude = 3.3679965;
-  double _destLatitude = 6.849660, _destLongitude = 3.648190;
+  final double _originLatitude = 6.5212402, _originLongitude = 3.3679965;
+  final double _destLatitude = 6.849660, _destLongitude = 3.648190;
   Map<MarkerId, Marker> markers = {};
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
@@ -119,7 +127,7 @@ class _LegacyMapScreenState extends State<LegacyMapScreen> {
           if (isLoading)
             Container(
               color: Colors.black26,
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             ),
@@ -131,7 +139,7 @@ class _LegacyMapScreenState extends State<LegacyMapScreen> {
               child: Card(
                 color: Colors.red[100],
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Text(
                     'Error: $errorMessage',
                     style: TextStyle(color: Colors.red[800]),
@@ -145,7 +153,7 @@ class _LegacyMapScreenState extends State<LegacyMapScreen> {
             right: 16,
             child: Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -153,16 +161,16 @@ class _LegacyMapScreenState extends State<LegacyMapScreen> {
                       'Legacy Directions API',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       'Using the original Google Directions API with basic routing features.',
                       style: Theme.of(context).textTheme.bodySmall,
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     ElevatedButton(
                       onPressed: _getPolyline,
-                      child: Text('Refresh Route'),
+                      child: const Text('Refresh Route'),
                     ),
                   ],
                 ),
@@ -185,7 +193,7 @@ class _LegacyMapScreenState extends State<LegacyMapScreen> {
   }
 
   _addPolyLine() {
-    PolylineId id = PolylineId("poly");
+    PolylineId id = const PolylineId("poly");
     Polyline polyline =
         Polyline(polylineId: id, color: Colors.blue, points: polylineCoordinates, width: 5);
     polylines[id] = polyline;
@@ -209,9 +217,9 @@ class _LegacyMapScreenState extends State<LegacyMapScreen> {
       );
 
       if (result.primaryRoute?.polylinePoints case List<PointLatLng> points) {
-        points.forEach((PointLatLng point) {
+        for (var point in points) {
           polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-        });
+        }
         _addPolyLine();
       } else {
         setState(() {
@@ -230,20 +238,265 @@ class _LegacyMapScreenState extends State<LegacyMapScreen> {
   }
 }
 
+// Custom Headers Example (Android-restricted API keys)
+class CustomHeadersMapScreen extends StatefulWidget {
+  final String apiKey;
+
+  const CustomHeadersMapScreen({super.key, required this.apiKey});
+
+  @override
+  CustomHeadersMapScreenState createState() => CustomHeadersMapScreenState();
+}
+
+class CustomHeadersMapScreenState extends State<CustomHeadersMapScreen> {
+  late GoogleMapController mapController;
+  final double _originLatitude = 6.5212402, _originLongitude = 3.3679965;
+  final double _destLatitude = 6.849660, _destLongitude = 3.648190;
+  Map<MarkerId, Marker> markers = {};
+  Map<PolylineId, Polyline> polylines = {};
+  late PolylinePoints polylinePoints;
+  bool isLoading = false;
+  String? errorMessage;
+  RoutesApiResponse? currentResponse;
+
+  // Custom headers for Android-restricted API keys
+  final TextEditingController _packageNameController = TextEditingController();
+  final TextEditingController _certFingerprintController = TextEditingController();
+  bool _useCustomHeaders = false;
+
+  @override
+  void initState() {
+    super.initState();
+    polylinePoints = PolylinePoints.enhanced(widget.apiKey);
+    _addMarker(LatLng(_originLatitude, _originLongitude), "origin", BitmapDescriptor.defaultMarker);
+    _addMarker(LatLng(_destLatitude, _destLongitude), "destination",
+        BitmapDescriptor.defaultMarkerWithHue(90));
+
+    // Set default values for demonstration
+    _packageNameController.text = 'com.example.myapp';
+    _certFingerprintController.text = 'YOUR_SHA1_FINGERPRINT';
+  }
+
+  @override
+  void dispose() {
+    _packageNameController.dispose();
+    _certFingerprintController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition:
+                CameraPosition(target: LatLng(_originLatitude, _originLongitude), zoom: 12),
+            myLocationEnabled: true,
+            tiltGesturesEnabled: true,
+            compassEnabled: true,
+            scrollGesturesEnabled: true,
+            zoomGesturesEnabled: true,
+            onMapCreated: _onMapCreated,
+            markers: Set<Marker>.of(markers.values),
+            polylines: Set<Polyline>.of(polylines.values),
+          ),
+          if (isLoading)
+            Container(
+              color: Colors.black26,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          if (errorMessage != null)
+            Positioned(
+              top: 16,
+              left: 16,
+              right: 16,
+              child: Card(
+                color: Colors.red[100],
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    'Error: $errorMessage',
+                    style: TextStyle(color: Colors.red[800]),
+                  ),
+                ),
+              ),
+            ),
+          Positioned(
+            bottom: 16,
+            left: 16,
+            right: 16,
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.security, color: Colors.purple),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Custom Headers Demo',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Demonstrates using custom headers for Android-restricted API keys.',
+                      style: Theme.of(context).textTheme.bodySmall,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    CheckboxListTile(
+                      title: const Text('Use Custom Headers', style: TextStyle(fontSize: 14)),
+                      subtitle: const Text('For Android-restricted API keys',
+                          style: TextStyle(fontSize: 12)),
+                      value: _useCustomHeaders,
+                      onChanged: (value) {
+                        setState(() {
+                          _useCustomHeaders = value ?? false;
+                        });
+                      },
+                      dense: true,
+                    ),
+                    if (_useCustomHeaders) ..._buildHeaderInputs(),
+                    const SizedBox(height: 8),
+                    ElevatedButton.icon(
+                      onPressed: _getRouteWithHeaders,
+                      icon: const Icon(Icons.security),
+                      label: const Text('Get Route with Headers'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purple,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildHeaderInputs() {
+    return [
+      const SizedBox(height: 8),
+      TextField(
+        controller: _packageNameController,
+        decoration: const InputDecoration(
+          labelText: 'Package Name',
+          hintText: 'com.example.myapp',
+          border: OutlineInputBorder(),
+        ),
+        style: const TextStyle(fontSize: 12),
+      ),
+      const SizedBox(height: 8),
+      TextField(
+        controller: _certFingerprintController,
+        decoration: const InputDecoration(
+          labelText: 'SHA1 Fingerprint',
+          hintText: 'YOUR_SHA1_FINGERPRINT',
+          border: OutlineInputBorder(),
+        ),
+        style: const TextStyle(fontSize: 12),
+      ),
+    ];
+  }
+
+  void _onMapCreated(GoogleMapController controller) async {
+    mapController = controller;
+  }
+
+  _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
+    MarkerId markerId = MarkerId(id);
+    Marker marker = Marker(markerId: markerId, icon: descriptor, position: position);
+    markers[markerId] = marker;
+  }
+
+  _addPolyLine(List<LatLng> coordinates) {
+    PolylineId id = const PolylineId("poly");
+    Polyline polyline =
+        Polyline(polylineId: id, color: Colors.purple, points: coordinates, width: 5);
+    polylines[id] = polyline;
+    setState(() {});
+  }
+
+  _getRouteWithHeaders() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+      polylines.clear();
+      currentResponse = null;
+    });
+
+    try {
+      // Prepare custom headers if enabled
+      Map<String, String>? customHeaders;
+      if (_useCustomHeaders) {
+        customHeaders = {
+          'X-Android-Package': _packageNameController.text.trim(),
+          'X-Android-Cert': _certFingerprintController.text.trim(),
+        };
+      }
+
+      RoutesApiResponse response = await polylinePoints.getRouteBetweenCoordinatesV2(
+        request: RoutesApiRequest(
+          origin: PointLatLng(_originLatitude, _originLongitude),
+          destination: PointLatLng(_destLatitude, _destLongitude),
+          travelMode: TravelMode.driving,
+          headers: customHeaders, // Pass custom headers
+        ),
+      );
+
+      setState(() {
+        currentResponse = response;
+      });
+
+      if (response.routes.isNotEmpty) {
+        final route = response.routes.first;
+        if (route.polylinePoints != null) {
+          final points = polylinePoints.convertToLegacyResult(response).points;
+          final coordinates =
+              points.map((point) => LatLng(point.latitude, point.longitude)).toList();
+          _addPolyLine(coordinates);
+        }
+      } else {
+        setState(() {
+          errorMessage = response.errorMessage ?? 'No route found';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = e.toString();
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+}
+
 // Routes API Example (Enhanced Features)
 class RoutesApiMapScreen extends StatefulWidget {
   final String apiKey;
 
-  const RoutesApiMapScreen({Key? key, required this.apiKey}) : super(key: key);
+  const RoutesApiMapScreen({super.key, required this.apiKey});
 
   @override
-  _RoutesApiMapScreenState createState() => _RoutesApiMapScreenState();
+  RoutesApiMapScreenState createState() => RoutesApiMapScreenState();
 }
 
-class _RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
+class RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
   late GoogleMapController mapController;
-  double _originLatitude = 6.5212402, _originLongitude = 3.3679965;
-  double _destLatitude = 6.849660, _destLongitude = 3.648190;
+  final double _originLatitude = 6.5212402, _originLongitude = 3.3679965;
+  final double _destLatitude = 6.849660, _destLongitude = 3.648190;
   Map<MarkerId, Marker> markers = {};
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
@@ -282,7 +535,7 @@ class _RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
           if (isLoading)
             Container(
               color: Colors.black26,
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             ),
@@ -294,7 +547,7 @@ class _RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
               child: Card(
                 color: Colors.red[100],
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Text(
                     'Error: $errorMessage',
                     style: TextStyle(color: Colors.red[800]),
@@ -308,7 +561,7 @@ class _RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
             right: 16,
             child: Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -316,7 +569,7 @@ class _RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
                       'Enhanced Routes API',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       'Using the new Google Routes API with traffic-aware routing, toll information, and enhanced features.',
                       style: Theme.of(context).textTheme.bodySmall,
@@ -324,17 +577,17 @@ class _RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
                     ),
                     if (currentResponse != null && currentResponse!.routes.isNotEmpty)
                       ..._buildRouteInfo(),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
                           onPressed: _getEnhancedRoute,
-                          child: Text('Enhanced Route'),
+                          child: const Text('Enhanced Route'),
                         ),
                         ElevatedButton(
                           onPressed: _getAlternativeRoutes,
-                          child: Text('Alternatives'),
+                          child: const Text('Alternatives'),
                         ),
                       ],
                     ),
@@ -351,19 +604,19 @@ class _RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
   List<Widget> _buildRouteInfo() {
     final route = currentResponse!.routes.first;
     return [
-      SizedBox(height: 8),
+      const SizedBox(height: 8),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Column(
             children: [
-              Text('Duration', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Duration', style: TextStyle(fontWeight: FontWeight.bold)),
               Text(route.duration?.toString() ?? 'N/A'),
             ],
           ),
           Column(
             children: [
-              Text('Distance', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Distance', style: TextStyle(fontWeight: FontWeight.bold)),
               Text(route.distanceMeters != null
                   ? '${(route.distanceMeters! / 1000).toStringAsFixed(1)} km'
                   : 'N/A'),
@@ -490,16 +743,16 @@ class _RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
 class TwoWheelerMapScreen extends StatefulWidget {
   final String apiKey;
 
-  const TwoWheelerMapScreen({Key? key, required this.apiKey}) : super(key: key);
+  const TwoWheelerMapScreen({super.key, required this.apiKey});
 
   @override
-  _TwoWheelerMapScreenState createState() => _TwoWheelerMapScreenState();
+  TwoWheelerMapScreenState createState() => TwoWheelerMapScreenState();
 }
 
-class _TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
+class TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
   late GoogleMapController mapController;
-  double _originLatitude = 6.5212402, _originLongitude = 3.3679965;
-  double _destLatitude = 6.849660, _destLongitude = 3.648190;
+  final double _originLatitude = 6.5212402, _originLongitude = 3.3679965;
+  final double _destLatitude = 6.849660, _destLongitude = 3.648190;
   Map<MarkerId, Marker> markers = {};
   Map<PolylineId, Polyline> polylines = {};
   late PolylinePoints polylinePointsV2;
@@ -539,7 +792,7 @@ class _TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
           if (isLoading)
             Container(
               color: Colors.black26,
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             ),
@@ -551,7 +804,7 @@ class _TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
               child: Card(
                 color: Colors.red[100],
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Text(
                     'Error: $errorMessage',
                     style: TextStyle(color: Colors.red[800]),
@@ -565,32 +818,32 @@ class _TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
             right: 16,
             child: Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.motorcycle, color: Colors.orange),
-                        SizedBox(width: 8),
+                        const Icon(Icons.motorcycle, color: Colors.orange),
+                        const SizedBox(width: 8),
                         Text(
                           'Two-Wheeler Routing',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       'Optimized routing for motorcycles and scooters. This feature is exclusive to the Routes API.',
                       style: Theme.of(context).textTheme.bodySmall,
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         Expanded(
                           child: CheckboxListTile(
-                            title: Text('Avoid Highways', style: TextStyle(fontSize: 12)),
+                            title: const Text('Avoid Highways', style: TextStyle(fontSize: 12)),
                             value: avoidHighways,
                             onChanged: (value) {
                               setState(() {
@@ -603,7 +856,7 @@ class _TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
                         ),
                         Expanded(
                           child: CheckboxListTile(
-                            title: Text('Avoid Tolls', style: TextStyle(fontSize: 12)),
+                            title: const Text('Avoid Tolls', style: TextStyle(fontSize: 12)),
                             value: avoidTolls,
                             onChanged: (value) {
                               setState(() {
@@ -618,11 +871,11 @@ class _TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
                     ),
                     if (currentResponse != null && currentResponse!.routes.isNotEmpty)
                       ..._buildRouteInfo(),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     ElevatedButton.icon(
                       onPressed: _getTwoWheelerRoute,
-                      icon: Icon(Icons.motorcycle),
-                      label: Text('Get Two-Wheeler Route'),
+                      icon: const Icon(Icons.motorcycle),
+                      label: const Text('Get Two-Wheeler Route'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
                         foregroundColor: Colors.white,
@@ -641,19 +894,19 @@ class _TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
   List<Widget> _buildRouteInfo() {
     final route = currentResponse!.routes.first;
     return [
-      SizedBox(height: 8),
+      const SizedBox(height: 8),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Column(
             children: [
-              Text('Duration', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Duration', style: TextStyle(fontWeight: FontWeight.bold)),
               Text(route.duration?.toString() ?? 'N/A'),
             ],
           ),
           Column(
             children: [
-              Text('Distance', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Distance', style: TextStyle(fontWeight: FontWeight.bold)),
               Text(route.distanceMeters != null
                   ? '${(route.distanceMeters! / 1000).toStringAsFixed(1)} km'
                   : 'N/A'),
@@ -675,7 +928,7 @@ class _TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
   }
 
   _addPolyLine(List<LatLng> coordinates) {
-    PolylineId id = PolylineId("poly");
+    PolylineId id = const PolylineId("poly");
     Polyline polyline =
         Polyline(polylineId: id, color: Colors.orange, points: coordinates, width: 5);
     polylines[id] = polyline;
@@ -692,12 +945,11 @@ class _TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
 
     try {
       RoutesApiResponse response = await polylinePointsV2.getRouteBetweenCoordinatesV2(
-        request: RequestConverter.createEnhancedRequest(
-          origin: PointLatLng(_originLatitude, _originLongitude),
-          destination: PointLatLng(_destLatitude, _destLongitude),
-          travelMode: TravelMode.twoWheeler,
-        )
-      );
+          request: RequestConverter.createEnhancedRequest(
+        origin: PointLatLng(_originLatitude, _originLongitude),
+        destination: PointLatLng(_destLatitude, _destLongitude),
+        travelMode: TravelMode.twoWheeler,
+      ));
 
       setState(() {
         currentResponse = response;

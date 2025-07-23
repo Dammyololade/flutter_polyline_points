@@ -325,6 +325,64 @@ void main() {
 
         expect(request.getFieldMask(), equals(customFieldMask));
       });
+
+      test('should handle complete workflow with custom headers', () {
+        // Step 1: Create request with custom headers for Android restricted API key
+        final customHeaders = {
+          'X-Android-Package': 'com.example.flutter_polyline_points',
+          'X-Android-Cert': 'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
+        };
+
+        final request = RoutesApiRequest(
+          origin: origin,
+          destination: destination,
+          travelMode: TravelMode.driving,
+          computeAlternativeRoutes: true,
+          routingPreference: RoutingPreference.trafficAware,
+          headers: customHeaders,
+        );
+
+        // Step 2: Verify request has headers
+        expect(request.headers, isNotNull);
+        expect(request.headers!['X-Android-Package'], 
+            equals('com.example.flutter_polyline_points'));
+        expect(request.headers!['X-Android-Cert'], 
+            equals('AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD'));
+
+        // Step 3: Verify request JSON structure (headers are not included in body)
+        final requestJson = request.toJson();
+        expect(requestJson['origin']['location']['latLng']['latitude'],
+            equals(37.7749));
+        expect(requestJson['destination']['location']['latLng']['latitude'],
+            equals(34.0522));
+        expect(requestJson['travelMode'], equals('DRIVE'));
+        // Headers should not be in the JSON body
+        expect(requestJson.containsKey('X-Android-Package'), isFalse);
+        expect(requestJson.containsKey('X-Android-Cert'), isFalse);
+
+        // Step 4: Simulate API response
+        final mockApiResponse = {
+          'routes': [
+            {
+              'duration': '14400s',
+              'staticDuration': '13500s',
+              'distanceMeters': 615000,
+              'polyline': {'encodedPolyline': 'u{~vFvyys@fS]'}
+            }
+          ]
+        };
+
+        // Step 5: Parse response
+        final response = RoutesApiResponse.fromJson(mockApiResponse);
+
+        // Step 6: Verify complete workflow
+        expect(response.hasRoutes, isTrue);
+        expect(response.primaryRoute, isNotNull);
+        expect(response.primaryRoute!.polylinePoints, isNotNull);
+        expect(response.primaryRoute!.polylinePoints, isNotEmpty);
+        expect(response.primaryRoute!.durationMinutes, equals(240.0));
+        expect(response.primaryRoute!.distanceKm, equals(615.0));
+      });
     });
 
     group('Error Handling and Edge Cases', () {

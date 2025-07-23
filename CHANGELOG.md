@@ -1,3 +1,6 @@
+## [3.0.0] - 2024-07-23
+- **NEW**: Add support for custom headers in Routes API requests.
+
 ## [3.0.0] - 2024-07-22
 
 ### 🚀 Major Refactor - Simplified and Unified API
