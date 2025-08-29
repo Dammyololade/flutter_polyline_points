@@ -98,7 +98,7 @@ class RoutesApiRequest {
     if (intermediates != null && intermediates!.isNotEmpty) {
       json['intermediates'] = intermediates!
           .map((waypoint) => {
-                'location': _parseLocationString(waypoint.location),
+                ..._parseLocationString(waypoint.location),
                 'via': !waypoint.stopOver,
               })
           .toList();
