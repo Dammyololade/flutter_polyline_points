@@ -80,7 +80,12 @@ class RoutesApiRequest {
     this.extraComputations,
     this.responseFieldMask,
     this.customBodyParameters,
-  });
+  }) : assert(
+          (travelMode != TravelMode.bicycling &&
+                  travelMode != TravelMode.walking) ||
+              (routingPreference == RoutingPreference.unspecified),
+          'Invalid request: Bicycling and walking travel modes must use RoutingPreference.unspecified.',
+        );
 
   /// Convert to JSON for API request
   Map<String, dynamic> toJson() {
