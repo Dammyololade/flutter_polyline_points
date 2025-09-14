@@ -1,6 +1,9 @@
 /// Routing preferences for the Google Routes API
 /// Determines how routes are optimized
 enum RoutingPreference {
+  /// Unspecified, defaults to [trafficUnaware].
+  unspecified('ROUTING_PREFERENCE_UNSPECIFIED'),
+
   /// Prioritize routes with the shortest travel time
   trafficUnaware('TRAFFIC_UNAWARE'),
   
@@ -28,6 +31,8 @@ enum RoutingPreference {
   /// Get a human-readable description of the routing preference
   String get description {
     switch (this) {
+      case RoutingPreference.unspecified:
+        return 'Unspecified preference. Defaults to traffic unaware';
       case RoutingPreference.trafficUnaware:
         return 'Fastest route without considering traffic';
       case RoutingPreference.trafficAware:
