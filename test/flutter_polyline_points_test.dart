@@ -31,6 +31,7 @@ void main() {
     );
 
     expect(response.routes.isNotEmpty, isTrue);
+    expect(response.status, equals("OK"));
 
     expect(response.routes.first.polylinePoints!.isNotEmpty, isTrue);
 

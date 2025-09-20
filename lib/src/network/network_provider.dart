@@ -80,6 +80,8 @@ class NetworkProvider {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        // v2 api does not include status so use response Phrase instead
+        data['status'] = response.reasonPhrase;
         return RoutesApiResponse.fromJson(data);
       } else {
         final errorData = json.decode(response.body);

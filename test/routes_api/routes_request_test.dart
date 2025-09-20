@@ -82,6 +82,7 @@ void main() {
         origin: origin,
         destination: destination,
         travelMode: TravelMode.walking,
+        routingPreference: RoutingPreference.unspecified,
         computeAlternativeRoutes: true,
         languageCode: 'es',
         customBodyParameters: {'testParam': 'testValue'},
@@ -160,6 +161,7 @@ void main() {
       final modifiedRequest = originalRequest.copyWith(
         destination: newDestination,
         travelMode: TravelMode.walking,
+        routingPreference: RoutingPreference.unspecified,
         computeAlternativeRoutes: true,
       );
 
@@ -292,6 +294,7 @@ void main() {
           origin: origin,
           destination: destination,
           travelMode: TravelMode.walking,
+          routingPreference: RoutingPreference.unspecified,
           computeAlternativeRoutes: true,
           headers: {'Original': 'header'},
         );

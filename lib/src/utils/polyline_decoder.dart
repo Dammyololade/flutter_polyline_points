@@ -7,44 +7,48 @@ class PolylineDecoder {
   static List<PointLatLng> run(String encoded) {
     try {
       final points = <PointLatLng>[];
-      int index = 0;
-      int lat = 0;
-      int lng = 0;
+      int index = 0, len = encoded.length;
+      int lat = 0, lng = 0;
+      BigInt Big0 = BigInt.from(0);
+      BigInt Big0x1f = BigInt.from(0x1f);
+      BigInt Big0x20 = BigInt.from(0x20);
 
-      while (index < encoded.length) {
+      while (index < len) {
         int shift = 0;
-        int result = 0;
-        int byte;
-
+        BigInt b, result;
+        result = Big0;
         do {
-          byte = encoded.codeUnitAt(index++) - 63;
-          result |= (byte & 0x1f) << shift;
+          b = BigInt.from(encoded.codeUnitAt(index++) - 63);
+          result |= (b & Big0x1f) << shift;
           shift += 5;
-        } while (byte >= 0x20);
-
-        int deltaLat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-        lat += deltaLat;
+        } while (b >= Big0x20);
+        BigInt rShifted = result >> 1;
+        int dLat;
+        if (result.isOdd)
+          dLat = (~rShifted).toInt();
+        else
+          dLat = rShifted.toInt();
+        lat += dLat;
 
         shift = 0;
-        result = 0;
-
+        result = Big0;
         do {
-          byte = encoded.codeUnitAt(index++) - 63;
-          result |= (byte & 0x1f) << shift;
+          b = BigInt.from(encoded.codeUnitAt(index++) - 63);
+          result |= (b & Big0x1f) << shift;
           shift += 5;
-        } while (byte >= 0x20);
+        } while (b >= Big0x20);
+        rShifted = result >> 1;
+        int dLng;
+        if (result.isOdd)
+          dLng = (~rShifted).toInt();
+        else
+          dLng = rShifted.toInt();
+        lng += dLng;
 
-        int deltaLng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-        lng += deltaLng;
-
-        points.add(PointLatLng(
-          lat / 1E5,
-          lng / 1E5,
-        ));
+        points.add(PointLatLng((lat / 1E5).toDouble(), (lng / 1E5).toDouble()));
       }
-
       return points;
-    }  catch (e) {
+    } catch (e) {
       return [];
     }
   }

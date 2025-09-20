@@ -37,7 +37,7 @@ void main() {
           travelMode: TravelMode.walking,
           intermediates: intermediates,
           computeAlternativeRoutes: true,
-          routingPreference: RoutingPreference.trafficAwareOptimal,
+          routingPreference: RoutingPreference.unspecified,
           units: Units.imperial,
           polylineQuality: PolylineQuality.highQuality,
           languageCode: 'en',
@@ -54,7 +54,7 @@ void main() {
         expect(json['travelMode'], equals('WALK'));
         expect(json['intermediates'], hasLength(2));
         expect(json['computeAlternativeRoutes'], isTrue);
-        expect(json['routingPreference'], equals('TRAFFIC_AWARE_OPTIMAL'));
+        expect(json['routingPreference'], equals("ROUTING_PREFERENCE_UNSPECIFIED"));
         expect(json['units'], equals('IMPERIAL'));
         expect(json['polylineQuality'], equals('HIGH_QUALITY'));
         expect(json['languageCode'], equals('en'));
