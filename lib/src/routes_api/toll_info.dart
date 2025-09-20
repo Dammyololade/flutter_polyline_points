@@ -2,10 +2,10 @@
 class TollInfo {
   /// Estimated toll costs for the route
   final List<TollCost>? estimatedPrice;
-  
+
   /// Whether the route contains toll roads
   final bool hasTolls;
-  
+
   /// Toll passes that can be used on this route
   final List<String>? applicableTollPasses;
 
@@ -44,7 +44,7 @@ class TollInfo {
   /// Get the total estimated toll cost in the specified currency
   double? getTotalCost([String? currencyCode]) {
     if (estimatedPrice == null || estimatedPrice!.isEmpty) return null;
-    
+
     if (currencyCode != null) {
       final costs = estimatedPrice!
           .where((cost) => cost.currencyCode == currencyCode)
@@ -52,7 +52,7 @@ class TollInfo {
       if (costs.isEmpty) return null;
       return costs.fold<double>(0.0, (sum, cost) => sum + cost.amount);
     }
-    
+
     // Return the first currency's total if no specific currency requested
     final firstCurrency = estimatedPrice!.first.currencyCode;
     return estimatedPrice!
@@ -63,10 +63,7 @@ class TollInfo {
   /// Get all available currencies for toll costs
   List<String> getAvailableCurrencies() {
     if (estimatedPrice == null) return [];
-    return estimatedPrice!
-        .map((cost) => cost.currencyCode)
-        .toSet()
-        .toList();
+    return estimatedPrice!.map((cost) => cost.currencyCode).toSet().toList();
   }
 
   @override
@@ -101,13 +98,13 @@ class TollInfo {
 class TollCost {
   /// The monetary amount of the toll
   final double amount;
-  
+
   /// The currency code (e.g., 'USD', 'EUR')
   final String currencyCode;
-  
+
   /// Human-readable description of the toll
   final String? description;
-  
+
   /// The toll plaza or section name
   final String? tollPlaza;
 
@@ -148,7 +145,7 @@ class TollCost {
       'CAD': r'C$',
       'AUD': r'A$',
     };
-    
+
     final symbol = symbols[currencyCode] ?? currencyCode;
     return '$symbol${amount.toStringAsFixed(2)}';
   }

@@ -39,15 +39,19 @@ void main() {
         );
 
         expect(request.headers, isNotNull);
-        expect(request.headers!['X-Android-Package'], equals('com.example.testapp'));
-        expect(request.headers!['X-Android-Cert'], equals('TEST_CERT_FINGERPRINT'));
+        expect(request.headers!['X-Android-Package'],
+            equals('com.example.testapp'));
+        expect(request.headers!['X-Android-Cert'],
+            equals('TEST_CERT_FINGERPRINT'));
         expect(request.headers!['Custom-Header'], equals('custom-value'));
       });
 
-      test('should handle Android-specific headers for restricted API keys', () {
+      test('should handle Android-specific headers for restricted API keys',
+          () {
         final androidHeaders = {
           'X-Android-Package': 'com.example.flutter_polyline_points',
-          'X-Android-Cert': 'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
+          'X-Android-Cert':
+              'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
         };
 
         final request = RoutesApiRequest(
@@ -58,10 +62,12 @@ void main() {
         );
 
         expect(request.headers, isNotNull);
-        expect(request.headers!['X-Android-Package'], 
+        expect(request.headers!['X-Android-Package'],
             equals('com.example.flutter_polyline_points'));
-        expect(request.headers!['X-Android-Cert'], 
-            equals('AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD'));
+        expect(
+            request.headers!['X-Android-Cert'],
+            equals(
+                'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD'));
       });
 
       test('should handle multiple custom headers', () {
@@ -120,11 +126,13 @@ void main() {
 
         // Original request should remain unchanged
         expect(originalRequest.headers, equals(originalHeaders));
-        expect(originalRequest.headers!['X-Android-Package'], equals('com.example.original'));
+        expect(originalRequest.headers!['X-Android-Package'],
+            equals('com.example.original'));
 
         // Copied request should have new headers
         expect(copiedRequest.headers, equals(newHeaders));
-        expect(copiedRequest.headers!['X-Android-Package'], equals('com.example.updated'));
+        expect(copiedRequest.headers!['X-Android-Package'],
+            equals('com.example.updated'));
         expect(copiedRequest.headers!['New-Header'], equals('new_value'));
       });
 
@@ -143,10 +151,12 @@ void main() {
 
         expect(request.languageCode, equals('es'));
         expect(request.headers, equals(customHeaders));
-        expect(request.headers!['X-Android-Package'], equals('com.example.app'));
+        expect(
+            request.headers!['X-Android-Package'], equals('com.example.app'));
       });
 
-      test('should handle request with both custom body parameters and headers', () {
+      test('should handle request with both custom body parameters and headers',
+          () {
         final customHeaders = {
           'X-Android-Package': 'com.example.app',
           'X-Android-Cert': 'cert123',
@@ -166,7 +176,7 @@ void main() {
 
         expect(request.headers, equals(customHeaders));
         expect(request.customBodyParameters, equals(customBodyParams));
-        
+
         final json = request.toJson();
         expect(json['extraComputations'], contains('TRAFFIC_ON_POLYLINE'));
         expect(json['customField'], equals('customValue'));
@@ -177,8 +187,8 @@ void main() {
       test('should accept valid header names and values', () {
         final validHeaders = {
           'X-Android-Package': 'com.example.app',
-          'X-Android-Cert': 'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+          'X-Android-Cert':
+              'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
           'Content-Type': 'application/json',
           'User-Agent': 'MyApp/1.0.0',
           'Accept-Language': 'en-US,en;q=0.9',
@@ -199,7 +209,8 @@ void main() {
       test('should handle special characters in header values', () {
         final headersWithSpecialChars = {
           'X-Android-Package': 'com.example.app_test-123',
-          'X-Android-Cert': 'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
+          'X-Android-Cert':
+              'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
           'Custom-Header': 'value with spaces and-dashes_underscores',
         };
 
@@ -210,7 +221,7 @@ void main() {
         );
 
         expect(request.headers, equals(headersWithSpecialChars));
-        expect(request.headers!['Custom-Header'], 
+        expect(request.headers!['Custom-Header'],
             equals('value with spaces and-dashes_underscores'));
       });
     });

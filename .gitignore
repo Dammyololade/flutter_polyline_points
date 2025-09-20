@@ -74,3 +74,4 @@ lib/src/Constants.dart
 lib/src/constants.dart
 example/lib/Constants.dart
 .fvm
+test/flutter_polyline_points_test.dart

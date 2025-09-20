@@ -15,8 +15,10 @@ import '../utils/request_converter.dart';
 /// Provides backward compatibility while enabling access to new Routes API features
 // ignore_for_file: deprecated_member_use_from_same_package
 class NetworkProvider {
-  static const String _directionsBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json';
-  static const String _routesBaseUrl = 'https://routes.googleapis.com/directions/v2:computeRoutes';
+  static const String _directionsBaseUrl =
+      'https://maps.googleapis.com/maps/api/directions/json';
+  static const String _routesBaseUrl =
+      'https://routes.googleapis.com/directions/v2:computeRoutes';
 
   /// Default timeout for HTTP requests
   static const Duration _defaultTimeout = Duration(seconds: 30);
@@ -105,8 +107,9 @@ class NetworkProvider {
 
     // Add waypoints if present
     if (request.wayPoints.isNotEmpty) {
-      final waypoints =
-          request.wayPoints.map((wp) => '${wp.stopOver ? '' : 'via:'}${wp.location}').join('|');
+      final waypoints = request.wayPoints
+          .map((wp) => '${wp.stopOver ? '' : 'via:'}${wp.location}')
+          .join('|');
       queryParams['waypoints'] = waypoints;
     }
 
@@ -120,7 +123,8 @@ class NetworkProvider {
       queryParams['avoid'] = _buildAvoidString(request);
     }
     if (request.departureTime != null) {
-      queryParams['departure_time'] = (request.departureTime! ~/ 1000).toString();
+      queryParams['departure_time'] =
+          (request.departureTime! ~/ 1000).toString();
     }
     if (request.arrivalTime != null) {
       queryParams['arrival_time'] = (request.arrivalTime! ~/ 1000).toString();
@@ -140,9 +144,12 @@ class NetworkProvider {
   /// Build avoid string for Directions API
   static String _buildAvoidString(PolylineRequest request) {
     final avoidList = <String>[];
-    if (request.avoidFeatures.contains(AvoidFeature.tolls)) avoidList.add('tolls');
-    if (request.avoidFeatures.contains(AvoidFeature.highways)) avoidList.add('highways');
-    if (request.avoidFeatures.contains(AvoidFeature.ferries)) avoidList.add('ferries');
+    if (request.avoidFeatures.contains(AvoidFeature.tolls))
+      avoidList.add('tolls');
+    if (request.avoidFeatures.contains(AvoidFeature.highways))
+      avoidList.add('highways');
+    if (request.avoidFeatures.contains(AvoidFeature.ferries))
+      avoidList.add('ferries');
     return avoidList.join('|');
   }
 
@@ -207,14 +214,24 @@ class NetworkProvider {
       points: PolylineDecoder.run(encodedPoints),
       status: status,
       overviewPolyline: route['overview_polyline']['points'],
-      totalDistanceValue:
-          route['legs'].map((leg) => leg['distance']['value']).reduce((v1, v2) => v1 + v2),
-      distanceTexts: <String>[...route['legs'].map((leg) => leg['distance']['text'])],
-      distanceValues: <int>[...route['legs'].map((leg) => leg['distance']['value'])],
-      totalDurationValue:
-          route['legs'].map((leg) => leg['duration']['value']).reduce((v1, v2) => v1 + v2),
-      durationTexts: <String>[...route['legs'].map((leg) => leg['duration']['text'])],
-      durationValues: <int>[...route['legs'].map((leg) => leg['duration']['value'])],
+      totalDistanceValue: route['legs']
+          .map((leg) => leg['distance']['value'])
+          .reduce((v1, v2) => v1 + v2),
+      distanceTexts: <String>[
+        ...route['legs'].map((leg) => leg['distance']['text'])
+      ],
+      distanceValues: <int>[
+        ...route['legs'].map((leg) => leg['distance']['value'])
+      ],
+      totalDurationValue: route['legs']
+          .map((leg) => leg['duration']['value'])
+          .reduce((v1, v2) => v1 + v2),
+      durationTexts: <String>[
+        ...route['legs'].map((leg) => leg['duration']['text'])
+      ],
+      durationValues: <int>[
+        ...route['legs'].map((leg) => leg['duration']['value'])
+      ],
       endAddress: route["legs"].last['end_address'],
       startAddress: route["legs"].first['start_address'],
     );
@@ -232,7 +249,8 @@ class NetworkProvider {
         mode: TravelMode.driving,
       );
 
-      await getRouteBetweenCoordinates(apiKey, testRequest, timeout: Duration(seconds: 10));
+      await getRouteBetweenCoordinates(apiKey, testRequest,
+          timeout: Duration(seconds: 10));
       results['directions_api'] = true;
     } catch (e) {
       results['directions_api'] = false;
@@ -245,7 +263,8 @@ class NetworkProvider {
         destination: PointLatLng(37.7849, -122.4094),
       );
 
-      await getRouteBetweenCoordinatesV2(apiKey, testRequest, timeout: Duration(seconds: 10));
+      await getRouteBetweenCoordinatesV2(apiKey, testRequest,
+          timeout: Duration(seconds: 10));
       results['routes_api'] = true;
     } catch (e) {
       results['routes_api'] = false;

@@ -27,7 +27,8 @@ void main() {
       expect(request.destination, equals(destination));
       expect(request.travelMode, equals(TravelMode.driving));
       expect(request.computeAlternativeRoutes, isFalse);
-      expect(request.routingPreference, equals(RoutingPreference.trafficUnaware));
+      expect(
+          request.routingPreference, equals(RoutingPreference.trafficUnaware));
       expect(request.units, equals(Units.metric));
       expect(request.polylineQuality, equals(PolylineQuality.overview));
       expect(request.optimizeWaypointOrder, isFalse);
@@ -65,14 +66,16 @@ void main() {
       expect(request.travelMode, equals(TravelMode.transit));
       expect(request.intermediates, equals(intermediates));
       expect(request.computeAlternativeRoutes, isTrue);
-      expect(request.routingPreference, equals(RoutingPreference.trafficAwareOptimal));
+      expect(request.routingPreference,
+          equals(RoutingPreference.trafficAwareOptimal));
       expect(request.units, equals(Units.imperial));
       expect(request.polylineQuality, equals(PolylineQuality.highQuality));
       expect(request.languageCode, equals('en'));
       expect(request.regionCode, equals('US'));
       expect(request.departureTime, equals(departureTime));
       expect(request.optimizeWaypointOrder, isTrue);
-      expect(request.responseFieldMask, equals('routes.duration,routes.distanceMeters'));
+      expect(request.responseFieldMask,
+          equals('routes.duration,routes.distanceMeters'));
       expect(request.customBodyParameters, equals(customParams));
       expect(request.headers, equals(customHeaders));
     });
@@ -91,9 +94,12 @@ void main() {
       final json = request.toJson();
 
       expect(json['origin']['location']['latLng']['latitude'], equals(37.7749));
-      expect(json['origin']['location']['latLng']['longitude'], equals(-122.4194));
-      expect(json['destination']['location']['latLng']['latitude'], equals(34.0522));
-      expect(json['destination']['location']['latLng']['longitude'], equals(-118.2437));
+      expect(
+          json['origin']['location']['latLng']['longitude'], equals(-122.4194));
+      expect(json['destination']['location']['latLng']['latitude'],
+          equals(34.0522));
+      expect(json['destination']['location']['latLng']['longitude'],
+          equals(-118.2437));
       expect(json['travelMode'], equals('WALK'));
       expect(json['computeAlternativeRoutes'], isTrue);
       expect(json['languageCode'], equals('es'));
@@ -117,8 +123,10 @@ void main() {
 
       expect(json['intermediates'], isNotNull);
       expect(json['intermediates'], hasLength(2));
-      expect(json['intermediates'][0]['via'], isFalse); // stopOver: true means via: false
-      expect(json['intermediates'][1]['via'], isTrue); // stopOver: false means via: true
+      expect(json['intermediates'][0]['via'],
+          isFalse); // stopOver: true means via: false
+      expect(json['intermediates'][1]['via'],
+          isTrue); // stopOver: false means via: true
       expect(json['optimizeWaypointOrder'], isTrue);
     });
 
@@ -257,8 +265,10 @@ void main() {
         );
 
         expect(request.headers, equals(customHeaders));
-        expect(request.headers!['X-Android-Package'], equals('com.example.myapp'));
-        expect(request.headers!['X-Android-Cert'], equals('SHA1_FINGERPRINT_HERE'));
+        expect(
+            request.headers!['X-Android-Package'], equals('com.example.myapp'));
+        expect(request.headers!['X-Android-Cert'],
+            equals('SHA1_FINGERPRINT_HERE'));
         expect(request.headers!['Custom-Header'], equals('custom-value'));
       });
 
@@ -286,10 +296,12 @@ void main() {
 
         expect(originalRequest.headers, equals(originalHeaders));
         expect(updatedRequest.headers, equals(newHeaders));
-        expect(updatedRequest.headers!['Additional-Header'], equals('new-value'));
+        expect(
+            updatedRequest.headers!['Additional-Header'], equals('new-value'));
       });
 
-      test('should preserve other fields when updating headers via copyWith', () {
+      test('should preserve other fields when updating headers via copyWith',
+          () {
         final originalRequest = RoutesApiRequest(
           origin: origin,
           destination: destination,
@@ -310,10 +322,12 @@ void main() {
         expect(updatedRequest.headers, equals({'Updated': 'header'}));
       });
 
-      test('should handle Android-specific headers for restricted API keys', () {
+      test('should handle Android-specific headers for restricted API keys',
+          () {
         final androidHeaders = {
           'X-Android-Package': 'com.example.flutter_app',
-          'X-Android-Cert': 'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
+          'X-Android-Cert':
+              'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
         };
 
         final request = RoutesApiRequest(
@@ -322,9 +336,12 @@ void main() {
           headers: androidHeaders,
         );
 
-        expect(request.headers!['X-Android-Package'], equals('com.example.flutter_app'));
-        expect(request.headers!['X-Android-Cert'], 
-            equals('AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD'));
+        expect(request.headers!['X-Android-Package'],
+            equals('com.example.flutter_app'));
+        expect(
+            request.headers!['X-Android-Cert'],
+            equals(
+                'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD'));
       });
     });
   });

@@ -32,7 +32,8 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late TabController _tabController;
-  String googleApiKey = "YOUR_GOOGLE_API_KEY_HERE"; // Replace with your actual API key
+  String googleApiKey =
+      "YOUR_GOOGLE_API_KEY_HERE"; // Replace with your actual API key
 
   @override
   void initState() {
@@ -100,7 +101,8 @@ class LegacyMapScreenState extends State<LegacyMapScreen> {
     super.initState();
     polylinePoints = PolylinePoints(apiKey: widget.apiKey);
 
-    _addMarker(LatLng(_originLatitude, _originLongitude), "origin", BitmapDescriptor.defaultMarker);
+    _addMarker(LatLng(_originLatitude, _originLongitude), "origin",
+        BitmapDescriptor.defaultMarker);
     _addMarker(LatLng(_destLatitude, _destLongitude), "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
 
@@ -113,8 +115,8 @@ class LegacyMapScreenState extends State<LegacyMapScreen> {
       body: Stack(
         children: [
           GoogleMap(
-            initialCameraPosition:
-                CameraPosition(target: LatLng(_originLatitude, _originLongitude), zoom: 12),
+            initialCameraPosition: CameraPosition(
+                target: LatLng(_originLatitude, _originLongitude), zoom: 12),
             myLocationEnabled: true,
             tiltGesturesEnabled: true,
             compassEnabled: true,
@@ -188,14 +190,18 @@ class LegacyMapScreenState extends State<LegacyMapScreen> {
 
   _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
     MarkerId markerId = MarkerId(id);
-    Marker marker = Marker(markerId: markerId, icon: descriptor, position: position);
+    Marker marker =
+        Marker(markerId: markerId, icon: descriptor, position: position);
     markers[markerId] = marker;
   }
 
   _addPolyLine() {
     PolylineId id = const PolylineId("poly");
-    Polyline polyline =
-        Polyline(polylineId: id, color: Colors.blue, points: polylineCoordinates, width: 5);
+    Polyline polyline = Polyline(
+        polylineId: id,
+        color: Colors.blue,
+        points: polylineCoordinates,
+        width: 5);
     polylines[id] = polyline;
     setState(() {});
   }
@@ -261,14 +267,16 @@ class CustomHeadersMapScreenState extends State<CustomHeadersMapScreen> {
 
   // Custom headers for Android-restricted API keys
   final TextEditingController _packageNameController = TextEditingController();
-  final TextEditingController _certFingerprintController = TextEditingController();
+  final TextEditingController _certFingerprintController =
+      TextEditingController();
   bool _useCustomHeaders = false;
 
   @override
   void initState() {
     super.initState();
     polylinePoints = PolylinePoints.enhanced(widget.apiKey);
-    _addMarker(LatLng(_originLatitude, _originLongitude), "origin", BitmapDescriptor.defaultMarker);
+    _addMarker(LatLng(_originLatitude, _originLongitude), "origin",
+        BitmapDescriptor.defaultMarker);
     _addMarker(LatLng(_destLatitude, _destLongitude), "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
 
@@ -290,8 +298,8 @@ class CustomHeadersMapScreenState extends State<CustomHeadersMapScreen> {
       body: Stack(
         children: [
           GoogleMap(
-            initialCameraPosition:
-                CameraPosition(target: LatLng(_originLatitude, _originLongitude), zoom: 12),
+            initialCameraPosition: CameraPosition(
+                target: LatLng(_originLatitude, _originLongitude), zoom: 12),
             myLocationEnabled: true,
             tiltGesturesEnabled: true,
             compassEnabled: true,
@@ -352,7 +360,8 @@ class CustomHeadersMapScreenState extends State<CustomHeadersMapScreen> {
                     ),
                     const SizedBox(height: 8),
                     CheckboxListTile(
-                      title: const Text('Use Custom Headers', style: TextStyle(fontSize: 14)),
+                      title: const Text('Use Custom Headers',
+                          style: TextStyle(fontSize: 14)),
                       subtitle: const Text('For Android-restricted API keys',
                           style: TextStyle(fontSize: 12)),
                       value: _useCustomHeaders,
@@ -415,14 +424,15 @@ class CustomHeadersMapScreenState extends State<CustomHeadersMapScreen> {
 
   _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
     MarkerId markerId = MarkerId(id);
-    Marker marker = Marker(markerId: markerId, icon: descriptor, position: position);
+    Marker marker =
+        Marker(markerId: markerId, icon: descriptor, position: position);
     markers[markerId] = marker;
   }
 
   _addPolyLine(List<LatLng> coordinates) {
     PolylineId id = const PolylineId("poly");
-    Polyline polyline =
-        Polyline(polylineId: id, color: Colors.purple, points: coordinates, width: 5);
+    Polyline polyline = Polyline(
+        polylineId: id, color: Colors.purple, points: coordinates, width: 5);
     polylines[id] = polyline;
     setState(() {});
   }
@@ -445,7 +455,8 @@ class CustomHeadersMapScreenState extends State<CustomHeadersMapScreen> {
         };
       }
 
-      RoutesApiResponse response = await polylinePoints.getRouteBetweenCoordinatesV2(
+      RoutesApiResponse response =
+          await polylinePoints.getRouteBetweenCoordinatesV2(
         request: RoutesApiRequest(
           origin: PointLatLng(_originLatitude, _originLongitude),
           destination: PointLatLng(_destLatitude, _destLongitude),
@@ -462,8 +473,9 @@ class CustomHeadersMapScreenState extends State<CustomHeadersMapScreen> {
         final route = response.routes.first;
         if (route.polylinePoints != null) {
           final points = polylinePoints.convertToLegacyResult(response).points;
-          final coordinates =
-              points.map((point) => LatLng(point.latitude, point.longitude)).toList();
+          final coordinates = points
+              .map((point) => LatLng(point.latitude, point.longitude))
+              .toList();
           _addPolyLine(coordinates);
         }
       } else {
@@ -509,7 +521,8 @@ class RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
   void initState() {
     super.initState();
     polylinePoints = PolylinePoints.enhanced(widget.apiKey);
-    _addMarker(LatLng(_originLatitude, _originLongitude), "origin", BitmapDescriptor.defaultMarker);
+    _addMarker(LatLng(_originLatitude, _originLongitude), "origin",
+        BitmapDescriptor.defaultMarker);
     _addMarker(LatLng(_destLatitude, _destLongitude), "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
     _getEnhancedRoute();
@@ -521,8 +534,8 @@ class RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
       body: Stack(
         children: [
           GoogleMap(
-            initialCameraPosition:
-                CameraPosition(target: LatLng(_originLatitude, _originLongitude), zoom: 12),
+            initialCameraPosition: CameraPosition(
+                target: LatLng(_originLatitude, _originLongitude), zoom: 12),
             myLocationEnabled: true,
             tiltGesturesEnabled: true,
             compassEnabled: true,
@@ -575,7 +588,8 @@ class RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
                       style: Theme.of(context).textTheme.bodySmall,
                       textAlign: TextAlign.center,
                     ),
-                    if (currentResponse != null && currentResponse!.routes.isNotEmpty)
+                    if (currentResponse != null &&
+                        currentResponse!.routes.isNotEmpty)
                       ..._buildRouteInfo(),
                     const SizedBox(height: 8),
                     Row(
@@ -610,13 +624,15 @@ class RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
         children: [
           Column(
             children: [
-              const Text('Duration', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Duration',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               Text(route.duration?.toString() ?? 'N/A'),
             ],
           ),
           Column(
             children: [
-              const Text('Distance', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Distance',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               Text(route.distanceMeters != null
                   ? '${(route.distanceMeters! / 1000).toStringAsFixed(1)} km'
                   : 'N/A'),
@@ -633,14 +649,16 @@ class RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
 
   _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
     MarkerId markerId = MarkerId(id);
-    Marker marker = Marker(markerId: markerId, icon: descriptor, position: position);
+    Marker marker =
+        Marker(markerId: markerId, icon: descriptor, position: position);
     markers[markerId] = marker;
   }
 
-  _addPolyLine(List<LatLng> coordinates, {Color color = Colors.green, String id = "poly"}) {
+  _addPolyLine(List<LatLng> coordinates,
+      {Color color = Colors.green, String id = "poly"}) {
     PolylineId polylineId = PolylineId(id);
-    Polyline polyline =
-        Polyline(polylineId: polylineId, color: color, points: coordinates, width: 5);
+    Polyline polyline = Polyline(
+        polylineId: polylineId, color: color, points: coordinates, width: 5);
     polylines[polylineId] = polyline;
     setState(() {});
   }
@@ -655,8 +673,9 @@ class RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
     });
 
     try {
-      RoutesApiResponse response = await polylinePoints.getRouteBetweenCoordinatesV2(
-          request: RequestConverter.createEnhancedRequest(
+      RoutesApiResponse response =
+          await polylinePoints.getRouteBetweenCoordinatesV2(
+              request: RequestConverter.createEnhancedRequest(
         origin: PointLatLng(_originLatitude, _originLongitude),
         destination: PointLatLng(_destLatitude, _destLongitude),
       ));
@@ -669,8 +688,9 @@ class RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
         final route = response.routes.first;
         if (route.polylinePoints != null) {
           final points = polylinePoints.convertToLegacyResult(response).points;
-          final coordinates =
-              points.map((point) => LatLng(point.latitude, point.longitude)).toList();
+          final coordinates = points
+              .map((point) => LatLng(point.latitude, point.longitude))
+              .toList();
           _addPolyLine(coordinates, color: Colors.green);
         }
       } else {
@@ -698,8 +718,9 @@ class RoutesApiMapScreenState extends State<RoutesApiMapScreen> {
     });
 
     try {
-      RoutesApiResponse response = await polylinePoints.getRouteBetweenCoordinatesV2(
-          request: RequestConverter.createEnhancedRequest(
+      RoutesApiResponse response =
+          await polylinePoints.getRouteBetweenCoordinatesV2(
+              request: RequestConverter.createEnhancedRequest(
         origin: PointLatLng(_originLatitude, _originLongitude),
         destination: PointLatLng(_destLatitude, _destLongitude),
         waypoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")],
@@ -766,7 +787,8 @@ class TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
   void initState() {
     super.initState();
     polylinePointsV2 = PolylinePoints.enhanced(widget.apiKey);
-    _addMarker(LatLng(_originLatitude, _originLongitude), "origin", BitmapDescriptor.defaultMarker);
+    _addMarker(LatLng(_originLatitude, _originLongitude), "origin",
+        BitmapDescriptor.defaultMarker);
     _addMarker(LatLng(_destLatitude, _destLongitude), "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
     _getTwoWheelerRoute();
@@ -778,8 +800,8 @@ class TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
       body: Stack(
         children: [
           GoogleMap(
-            initialCameraPosition:
-                CameraPosition(target: LatLng(_originLatitude, _originLongitude), zoom: 12),
+            initialCameraPosition: CameraPosition(
+                target: LatLng(_originLatitude, _originLongitude), zoom: 12),
             myLocationEnabled: true,
             tiltGesturesEnabled: true,
             compassEnabled: true,
@@ -843,7 +865,8 @@ class TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
                       children: [
                         Expanded(
                           child: CheckboxListTile(
-                            title: const Text('Avoid Highways', style: TextStyle(fontSize: 12)),
+                            title: const Text('Avoid Highways',
+                                style: TextStyle(fontSize: 12)),
                             value: avoidHighways,
                             onChanged: (value) {
                               setState(() {
@@ -856,7 +879,8 @@ class TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
                         ),
                         Expanded(
                           child: CheckboxListTile(
-                            title: const Text('Avoid Tolls', style: TextStyle(fontSize: 12)),
+                            title: const Text('Avoid Tolls',
+                                style: TextStyle(fontSize: 12)),
                             value: avoidTolls,
                             onChanged: (value) {
                               setState(() {
@@ -869,7 +893,8 @@ class TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
                         ),
                       ],
                     ),
-                    if (currentResponse != null && currentResponse!.routes.isNotEmpty)
+                    if (currentResponse != null &&
+                        currentResponse!.routes.isNotEmpty)
                       ..._buildRouteInfo(),
                     const SizedBox(height: 8),
                     ElevatedButton.icon(
@@ -900,13 +925,15 @@ class TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
         children: [
           Column(
             children: [
-              const Text('Duration', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Duration',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               Text(route.duration?.toString() ?? 'N/A'),
             ],
           ),
           Column(
             children: [
-              const Text('Distance', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Distance',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               Text(route.distanceMeters != null
                   ? '${(route.distanceMeters! / 1000).toStringAsFixed(1)} km'
                   : 'N/A'),
@@ -923,14 +950,15 @@ class TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
 
   _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
     MarkerId markerId = MarkerId(id);
-    Marker marker = Marker(markerId: markerId, icon: descriptor, position: position);
+    Marker marker =
+        Marker(markerId: markerId, icon: descriptor, position: position);
     markers[markerId] = marker;
   }
 
   _addPolyLine(List<LatLng> coordinates) {
     PolylineId id = const PolylineId("poly");
-    Polyline polyline =
-        Polyline(polylineId: id, color: Colors.orange, points: coordinates, width: 5);
+    Polyline polyline = Polyline(
+        polylineId: id, color: Colors.orange, points: coordinates, width: 5);
     polylines[id] = polyline;
     setState(() {});
   }
@@ -944,8 +972,9 @@ class TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
     });
 
     try {
-      RoutesApiResponse response = await polylinePointsV2.getRouteBetweenCoordinatesV2(
-          request: RequestConverter.createEnhancedRequest(
+      RoutesApiResponse response =
+          await polylinePointsV2.getRouteBetweenCoordinatesV2(
+              request: RequestConverter.createEnhancedRequest(
         origin: PointLatLng(_originLatitude, _originLongitude),
         destination: PointLatLng(_destLatitude, _destLongitude),
         travelMode: TravelMode.twoWheeler,
@@ -958,9 +987,11 @@ class TwoWheelerMapScreenState extends State<TwoWheelerMapScreen> {
       if (response.routes.isNotEmpty) {
         final route = response.routes.first;
         if (route.polylinePoints != null) {
-          final points = polylinePointsV2.convertToLegacyResult(response).points;
-          final coordinates =
-              points.map((point) => LatLng(point.latitude, point.longitude)).toList();
+          final points =
+              polylinePointsV2.convertToLegacyResult(response).points;
+          final coordinates = points
+              .map((point) => LatLng(point.latitude, point.longitude))
+              .toList();
           _addPolyLine(coordinates);
         }
       } else {

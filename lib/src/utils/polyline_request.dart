@@ -97,7 +97,7 @@ class PolylineRequest {
       params.addAll({"waypoints": wayPointsString});
     }
 
-    if(avoidFeatures.isNotEmpty) {
+    if (avoidFeatures.isNotEmpty) {
       params.addAll({
         "avoid": avoidFeatures.map((feature) => feature.name).join('|'),
       });

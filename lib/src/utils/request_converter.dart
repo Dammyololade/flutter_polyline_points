@@ -22,13 +22,16 @@ class RequestConverter {
       computeAlternativeRoutes: legacyRequest.alternatives,
       routingPreference: _determineRoutingPreference(legacyRequest),
       units: _determineUnits(legacyRequest),
-      polylineQuality: PolylineQuality.overview, // Default for legacy compatibility
+      polylineQuality:
+          PolylineQuality.overview, // Default for legacy compatibility
       routeModifiers: _createRouteModifiers(legacyRequest),
-      departureTime: legacyRequest.departureTime != null 
-          ? DateTime.fromMillisecondsSinceEpoch(legacyRequest.departureTime! * 1000) 
+      departureTime: legacyRequest.departureTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              legacyRequest.departureTime! * 1000)
           : null,
-      arrivalTime: legacyRequest.arrivalTime != null 
-          ? DateTime.fromMillisecondsSinceEpoch(legacyRequest.arrivalTime! * 1000) 
+      arrivalTime: legacyRequest.arrivalTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              legacyRequest.arrivalTime! * 1000)
           : null,
       optimizeWaypointOrder: legacyRequest.optimizeWaypoints,
     );
@@ -42,11 +45,11 @@ class RequestConverter {
       mode: routesRequest.travelMode,
       wayPoints: routesRequest.intermediates ?? [],
       alternatives: routesRequest.computeAlternativeRoutes,
-      departureTime: routesRequest.departureTime?.millisecondsSinceEpoch != null 
-          ? (routesRequest.departureTime!.millisecondsSinceEpoch ~/ 1000) 
+      departureTime: routesRequest.departureTime?.millisecondsSinceEpoch != null
+          ? (routesRequest.departureTime!.millisecondsSinceEpoch ~/ 1000)
           : null,
-      arrivalTime: routesRequest.arrivalTime?.millisecondsSinceEpoch != null 
-          ? (routesRequest.arrivalTime!.millisecondsSinceEpoch ~/ 1000) 
+      arrivalTime: routesRequest.arrivalTime?.millisecondsSinceEpoch != null
+          ? (routesRequest.arrivalTime!.millisecondsSinceEpoch ~/ 1000)
           : null,
       optimizeWaypoints: routesRequest.optimizeWaypointOrder,
       avoidFeatures: _createAvoidFeatures(routesRequest.routeModifiers),
@@ -55,7 +58,8 @@ class RequestConverter {
   }
 
   /// Determine routing preference based on legacy request parameters
-  static RoutingPreference _determineRoutingPreference(PolylineRequest legacyRequest) {
+  static RoutingPreference _determineRoutingPreference(
+      PolylineRequest legacyRequest) {
     // Legacy API doesn't have explicit routing preferences
     // Use traffic-unaware as default for compatibility
     return RoutingPreference.trafficUnaware;
@@ -74,22 +78,25 @@ class RequestConverter {
 
     return RouteModifiers(
       avoidTolls: legacyRequest.avoidFeatures.contains(AvoidFeature.tolls),
-      avoidHighways: legacyRequest.avoidFeatures.contains(AvoidFeature.highways),
+      avoidHighways:
+          legacyRequest.avoidFeatures.contains(AvoidFeature.highways),
       avoidFerries: legacyRequest.avoidFeatures.contains(AvoidFeature.ferries),
       avoidIndoor: legacyRequest.avoidFeatures.contains(AvoidFeature.indoor),
     );
   }
 
   /// Create avoid features list from route modifiers
-  static List<AvoidFeature> _createAvoidFeatures(RouteModifiers? routeModifiers) {
+  static List<AvoidFeature> _createAvoidFeatures(
+      RouteModifiers? routeModifiers) {
     if (routeModifiers == null) return [];
-    
+
     final features = <AvoidFeature>[];
     if (routeModifiers.avoidTolls == true) features.add(AvoidFeature.tolls);
-    if (routeModifiers.avoidHighways == true) features.add(AvoidFeature.highways);
+    if (routeModifiers.avoidHighways == true)
+      features.add(AvoidFeature.highways);
     if (routeModifiers.avoidFerries == true) features.add(AvoidFeature.ferries);
     if (routeModifiers.avoidIndoor == true) features.add(AvoidFeature.indoor);
-    
+
     return features;
   }
 
@@ -164,7 +171,7 @@ class RequestConverter {
     List<ExtraComputation>? extraComputations,
   }) {
     final baseRequest = convertToRoutesApi(legacyRequest);
-    
+
     return baseRequest.copyWith(
       routingPreference: routingPreference ?? baseRequest.routingPreference,
       units: units ?? baseRequest.units,
@@ -218,10 +225,11 @@ class RequestConverter {
       units: units,
       polylineQuality: polylineQuality,
       routeModifiers: routeModifiers,
-      extraComputations: extraComputations ?? [
-        ExtraComputation.tolls,
-        ExtraComputation.trafficOnPolyline,
-      ],
+      extraComputations: extraComputations ??
+          [
+            ExtraComputation.tolls,
+            ExtraComputation.trafficOnPolyline,
+          ],
       languageCode: languageCode,
       regionCode: regionCode,
     );

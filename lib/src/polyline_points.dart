@@ -93,7 +93,6 @@ class PolylinePoints {
     required RoutesApiRequest request,
     Duration? timeout,
   }) async {
-
     return NetworkProvider.getRouteBetweenCoordinatesV2(
       apiKey,
       request,
@@ -116,8 +115,9 @@ class PolylinePoints {
     }
 
     final route = response.routes.first;
-    final points =
-        route.polylineEncoded != null ? PolylineDecoder.run(route.polylineEncoded!) : <PointLatLng>[];
+    final points = route.polylineEncoded != null
+        ? PolylineDecoder.run(route.polylineEncoded!)
+        : <PointLatLng>[];
 
     return PolylineResult(
       points: points,
@@ -151,5 +151,4 @@ class PolylinePoints {
   static List<PointLatLng> decodePolyline(String encodedString) {
     return PolylineDecoder.run(encodedString);
   }
-
 }
