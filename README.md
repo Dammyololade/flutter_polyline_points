@@ -22,7 +22,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_polyline_points: ^3.0.0
+  flutter_polyline_points: ^3.0.1
 ```
 
 Then run:
@@ -195,6 +195,53 @@ RoutesApiRequest request = RoutesApiRequest(
   // arrivalTime: DateTime.now().add(Duration(hours: 2)),
 );
 ```
+
+### Custom Headers
+
+You can pass custom HTTP headers with your Routes API requests. This is particularly useful for Android-restricted API keys:
+
+```dart
+RoutesApiRequest request = RoutesApiRequest(
+  origin: PointLatLng(37.7749, -122.4194),
+  destination: PointLatLng(37.3382, -121.8863),
+  travelMode: TravelMode.driving,
+  headers: {
+    'X-Android-Package': 'com.example.myapp',
+    'X-Android-Cert': 'YOUR_SHA1_FINGERPRINT',
+    // Add any other custom headers
+  },
+);
+```
+
+#### Using with google_api_headers Package
+
+For easier Android header management, you can use the [`google_api_headers`](https://pub.dev/packages/google_api_headers) package:
+
+```yaml
+dependencies:
+  flutter_polyline_points: ^3.0.0
+  google_api_headers: ^4.0.0
+```
+
+```dart
+import 'package:google_api_headers/google_api_headers.dart';
+
+// Get Android-specific headers
+Map<String, String> headers = await const GoogleApiHeaders().getHeaders();
+
+RoutesApiRequest request = RoutesApiRequest(
+  origin: PointLatLng(37.7749, -122.4194),
+  destination: PointLatLng(37.3382, -121.8863),
+  travelMode: TravelMode.driving,
+  headers: headers, // Use the generated headers
+);
+
+RoutesApiResponse response = await polylinePoints.getRouteBetweenCoordinatesV2(
+  request: request,
+);
+```
+
+**Note**: Custom headers are only supported with the Routes API (`getRouteBetweenCoordinatesV2`). The legacy Directions API uses GET requests and doesn't support custom headers.
 
 ## 🔄 Migration Guide
 

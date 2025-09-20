@@ -62,6 +62,12 @@ class RoutesApiRequest {
   /// This allows users to add additional parameters not covered by the current implementation
   final Map<String, dynamic>? customBodyParameters;
 
+  /// Custom headers to include in the HTTP request
+  /// This allows users to add additional headers such as Android-specific headers
+  /// for restricted API keys (X-Android-Package, X-Android-Cert)
+  /// Use the google_api_headers package to automatically generate these headers
+  final Map<String, String>? headers;
+
   const RoutesApiRequest({
     required this.origin,
     required this.destination,
@@ -80,6 +86,7 @@ class RoutesApiRequest {
     this.extraComputations,
     this.responseFieldMask,
     this.customBodyParameters,
+    this.headers,
   }) : assert(
           (travelMode != TravelMode.bicycling &&
                   travelMode != TravelMode.walking) ||
@@ -208,6 +215,7 @@ class RoutesApiRequest {
     List<ExtraComputation>? extraComputations,
     String? responseFieldMask,
     Map<String, dynamic>? customBodyParameters,
+    Map<String, String>? headers,
   }) {
     return RoutesApiRequest(
       origin: origin ?? this.origin,
@@ -227,6 +235,7 @@ class RoutesApiRequest {
       extraComputations: extraComputations ?? this.extraComputations,
       responseFieldMask: responseFieldMask ?? this.responseFieldMask,
       customBodyParameters: customBodyParameters ?? this.customBodyParameters,
+      headers: headers ?? this.headers,
     );
   }
 

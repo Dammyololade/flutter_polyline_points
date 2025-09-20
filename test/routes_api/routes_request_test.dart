@@ -39,6 +39,10 @@ void main() {
       ];
       final departureTime = DateTime.now().add(Duration(hours: 1));
       final customParams = {'customField': 'customValue'};
+      final customHeaders = {
+        'X-Android-Package': 'com.example.app',
+        'X-Android-Cert': 'ABC123DEF456',
+      };
 
       final request = RoutesApiRequest(
         origin: origin,
@@ -55,6 +59,7 @@ void main() {
         optimizeWaypointOrder: true,
         responseFieldMask: 'routes.duration,routes.distanceMeters',
         customBodyParameters: customParams,
+        headers: customHeaders,
       );
 
       expect(request.travelMode, equals(TravelMode.transit));
@@ -69,6 +74,7 @@ void main() {
       expect(request.optimizeWaypointOrder, isTrue);
       expect(request.responseFieldMask, equals('routes.duration,routes.distanceMeters'));
       expect(request.customBodyParameters, equals(customParams));
+      expect(request.headers, equals(customHeaders));
     });
 
     test('should convert to JSON correctly', () {
@@ -212,6 +218,111 @@ void main() {
       // Ensure standard fields are still present
       expect(json['origin'], isNotNull);
       expect(json['destination'], isNotNull);
+    });
+
+    group('Headers functionality', () {
+      test('should handle null headers', () {
+        final request = RoutesApiRequest(
+          origin: origin,
+          destination: destination,
+          headers: null,
+        );
+
+        expect(request.headers, isNull);
+      });
+
+      test('should handle empty headers map', () {
+        final request = RoutesApiRequest(
+          origin: origin,
+          destination: destination,
+          headers: {},
+        );
+
+        expect(request.headers, isEmpty);
+      });
+
+      test('should store custom headers correctly', () {
+        final customHeaders = {
+          'X-Android-Package': 'com.example.myapp',
+          'X-Android-Cert': 'SHA1_FINGERPRINT_HERE',
+          'Custom-Header': 'custom-value',
+        };
+
+        final request = RoutesApiRequest(
+          origin: origin,
+          destination: destination,
+          headers: customHeaders,
+        );
+
+        expect(request.headers, equals(customHeaders));
+        expect(request.headers!['X-Android-Package'], equals('com.example.myapp'));
+        expect(request.headers!['X-Android-Cert'], equals('SHA1_FINGERPRINT_HERE'));
+        expect(request.headers!['Custom-Header'], equals('custom-value'));
+      });
+
+      test('should include headers in copyWith method', () {
+        final originalHeaders = {
+          'X-Android-Package': 'com.example.original',
+          'X-Android-Cert': 'ORIGINAL_CERT',
+        };
+
+        final newHeaders = {
+          'X-Android-Package': 'com.example.updated',
+          'X-Android-Cert': 'UPDATED_CERT',
+          'Additional-Header': 'new-value',
+        };
+
+        final originalRequest = RoutesApiRequest(
+          origin: origin,
+          destination: destination,
+          headers: originalHeaders,
+        );
+
+        final updatedRequest = originalRequest.copyWith(
+          headers: newHeaders,
+        );
+
+        expect(originalRequest.headers, equals(originalHeaders));
+        expect(updatedRequest.headers, equals(newHeaders));
+        expect(updatedRequest.headers!['Additional-Header'], equals('new-value'));
+      });
+
+      test('should preserve other fields when updating headers via copyWith', () {
+        final originalRequest = RoutesApiRequest(
+          origin: origin,
+          destination: destination,
+          travelMode: TravelMode.walking,
+          computeAlternativeRoutes: true,
+          headers: {'Original': 'header'},
+        );
+
+        final updatedRequest = originalRequest.copyWith(
+          headers: {'Updated': 'header'},
+        );
+
+        expect(updatedRequest.origin, equals(origin));
+        expect(updatedRequest.destination, equals(destination));
+        expect(updatedRequest.travelMode, equals(TravelMode.walking));
+        expect(updatedRequest.computeAlternativeRoutes, isTrue);
+        expect(updatedRequest.headers, equals({'Updated': 'header'}));
+      });
+
+      test('should handle Android-specific headers for restricted API keys', () {
+        final androidHeaders = {
+          'X-Android-Package': 'com.example.flutter_app',
+          'X-Android-Cert': 'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
+        };
+
+        final request = RoutesApiRequest(
+          origin: origin,
+          destination: destination,
+          headers: androidHeaders,
+        );
+
+        expect(request.headers!['X-Android-Package'], equals('com.example.flutter_app'));
+        expect(request.headers!['X-Android-Cert'], 
+            equals('AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD'));
+      });
     });
   });
 }

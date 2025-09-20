@@ -169,6 +169,11 @@ class NetworkProvider {
       headers['Accept-Language'] = request.languageCode!;
     }
 
+    // Add custom headers from request
+    if (request.headers != null) {
+      headers.addAll(request.headers!);
+    }
+
     return headers;
   }
 
