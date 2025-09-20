@@ -4,16 +4,16 @@ enum PolylineQuality {
   /// High-quality polyline with detailed geometry
   /// Recommended for precise route visualization
   highQuality('HIGH_QUALITY'),
-  
+
   /// Overview polyline with simplified geometry
   /// Suitable for route overviews and reduced data usage
   overview('OVERVIEW');
 
   const PolylineQuality(this.value);
-  
+
   /// The string value used in API requests
   final String value;
-  
+
   /// Convert from string value to enum
   static PolylineQuality? fromString(String value) {
     for (PolylineQuality quality in PolylineQuality.values) {
@@ -23,7 +23,7 @@ enum PolylineQuality {
     }
     return null;
   }
-  
+
   /// Get a description of the polyline quality
   String get description {
     switch (this) {
@@ -33,7 +33,7 @@ enum PolylineQuality {
         return 'Simplified polyline for route overview with reduced data usage';
     }
   }
-  
+
   /// Recommended use case for this quality level
   String get useCase {
     switch (this) {

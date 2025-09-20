@@ -6,18 +6,18 @@ enum RoutingPreference {
 
   /// Prioritize routes with the shortest travel time
   trafficUnaware('TRAFFIC_UNAWARE'),
-  
+
   /// Consider current traffic conditions for optimal time
   trafficAware('TRAFFIC_AWARE'),
-  
+
   /// Prioritize routes that avoid traffic when possible
   trafficAwareOptimal('TRAFFIC_AWARE_OPTIMAL');
 
   const RoutingPreference(this.value);
-  
+
   /// The string value used in API requests
   final String value;
-  
+
   /// Convert from string value to enum
   static RoutingPreference? fromString(String value) {
     for (RoutingPreference preference in RoutingPreference.values) {
@@ -27,7 +27,7 @@ enum RoutingPreference {
     }
     return null;
   }
-  
+
   /// Get a human-readable description of the routing preference
   String get description {
     switch (this) {

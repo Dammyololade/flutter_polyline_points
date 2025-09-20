@@ -37,7 +37,7 @@ void main() {
           travelMode: TravelMode.walking,
           intermediates: intermediates,
           computeAlternativeRoutes: true,
-          routingPreference: RoutingPreference.trafficAwareOptimal,
+          routingPreference: RoutingPreference.unspecified,
           units: Units.imperial,
           polylineQuality: PolylineQuality.highQuality,
           languageCode: 'en',
@@ -54,7 +54,8 @@ void main() {
         expect(json['travelMode'], equals('WALK'));
         expect(json['intermediates'], hasLength(2));
         expect(json['computeAlternativeRoutes'], isTrue);
-        expect(json['routingPreference'], equals('TRAFFIC_AWARE_OPTIMAL'));
+        expect(json['routingPreference'],
+            equals("ROUTING_PREFERENCE_UNSPECIFIED"));
         expect(json['units'], equals('IMPERIAL'));
         expect(json['polylineQuality'], equals('HIGH_QUALITY'));
         expect(json['languageCode'], equals('en'));
@@ -330,7 +331,8 @@ void main() {
         // Step 1: Create request with custom headers for Android restricted API key
         final customHeaders = {
           'X-Android-Package': 'com.example.flutter_polyline_points',
-          'X-Android-Cert': 'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
+          'X-Android-Cert':
+              'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD',
         };
 
         final request = RoutesApiRequest(
@@ -344,10 +346,12 @@ void main() {
 
         // Step 2: Verify request has headers
         expect(request.headers, isNotNull);
-        expect(request.headers!['X-Android-Package'], 
+        expect(request.headers!['X-Android-Package'],
             equals('com.example.flutter_polyline_points'));
-        expect(request.headers!['X-Android-Cert'], 
-            equals('AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD'));
+        expect(
+            request.headers!['X-Android-Cert'],
+            equals(
+                'AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD'));
 
         // Step 3: Verify request JSON structure (headers are not included in body)
         final requestJson = request.toJson();

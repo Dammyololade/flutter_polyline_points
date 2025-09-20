@@ -11,46 +11,46 @@ import 'route_modifiers.dart';
 class RoutesApiRequest {
   /// Starting point of the route
   final PointLatLng origin;
-  
+
   /// Ending point of the route
   final PointLatLng destination;
-  
+
   /// Travel mode for the route
   final TravelMode travelMode;
-  
+
   /// Intermediate waypoints along the route
   final List<PolylineWayPoint>? intermediates;
-  
+
   /// Whether to compute alternative routes
   final bool computeAlternativeRoutes;
-  
+
   /// Route calculation preferences
   final RoutingPreference routingPreference;
-  
+
   /// Unit system for distances and durations
   final Units units;
-  
+
   /// Quality level for the returned polyline
   final PolylineQuality polylineQuality;
-  
+
   /// Route modifiers (avoidances, vehicle info, etc.)
   final RouteModifiers? routeModifiers;
-  
+
   /// Language code for localized text (e.g., 'en', 'es', 'fr')
   final String? languageCode;
-  
+
   /// Region code for localization (e.g., 'US', 'GB')
   final String? regionCode;
-  
+
   /// Departure time for transit or traffic-aware routing
   final DateTime? departureTime;
-  
+
   /// Arrival time for transit routing
   final DateTime? arrivalTime;
-  
+
   /// Whether to optimize waypoint order
   final bool optimizeWaypointOrder;
-  
+
   /// Extra computations to include in the response
   final List<ExtraComputation>? extraComputations;
 
@@ -114,7 +114,7 @@ class RoutesApiRequest {
                 'via': !waypoint.stopOver,
               })
           .toList();
-      
+
       if (optimizeWaypointOrder) {
         json['optimizeWaypointOrder'] = true;
       }
@@ -143,9 +143,8 @@ class RoutesApiRequest {
 
     // Add extra computations
     if (extraComputations != null && extraComputations!.isNotEmpty) {
-      json['extraComputations'] = extraComputations!
-          .map((computation) => computation.value)
-          .toList();
+      json['extraComputations'] =
+          extraComputations!.map((computation) => computation.value).toList();
     }
 
     // Add custom body parameters
@@ -188,7 +187,7 @@ class RoutesApiRequest {
     final fields = <String>[
       // Essential route information only
       'routes.duration',
-      'routes.staticDuration', 
+      'routes.staticDuration',
       'routes.distanceMeters',
       'routes.polyline.encodedPolyline',
     ];
@@ -222,7 +221,8 @@ class RoutesApiRequest {
       destination: destination ?? this.destination,
       travelMode: travelMode ?? this.travelMode,
       intermediates: intermediates ?? this.intermediates,
-      computeAlternativeRoutes: computeAlternativeRoutes ?? this.computeAlternativeRoutes,
+      computeAlternativeRoutes:
+          computeAlternativeRoutes ?? this.computeAlternativeRoutes,
       routingPreference: routingPreference ?? this.routingPreference,
       units: units ?? this.units,
       polylineQuality: polylineQuality ?? this.polylineQuality,
@@ -231,7 +231,8 @@ class RoutesApiRequest {
       regionCode: regionCode ?? this.regionCode,
       departureTime: departureTime ?? this.departureTime,
       arrivalTime: arrivalTime ?? this.arrivalTime,
-      optimizeWaypointOrder: optimizeWaypointOrder ?? this.optimizeWaypointOrder,
+      optimizeWaypointOrder:
+          optimizeWaypointOrder ?? this.optimizeWaypointOrder,
       extraComputations: extraComputations ?? this.extraComputations,
       responseFieldMask: responseFieldMask ?? this.responseFieldMask,
       customBodyParameters: customBodyParameters ?? this.customBodyParameters,
@@ -295,20 +296,20 @@ class RoutesApiRequest {
 enum ExtraComputation {
   /// Include toll information in the response
   tolls('TOLLS'),
-  
+
   /// Include fuel consumption estimates
   fuelConsumption('FUEL_CONSUMPTION'),
-  
+
   /// Include traffic information along the polyline
   trafficOnPolyline('TRAFFIC_ON_POLYLINE'),
-  
+
   /// Include HTML-formatted navigation instructions
   htmlFormattedNavigationInstructions('HTML_FORMATTED_NAVIGATION_INSTRUCTIONS');
 
   const ExtraComputation(this.value);
-  
+
   final String value;
-  
+
   static ExtraComputation? fromString(String value) {
     for (ExtraComputation computation in ExtraComputation.values) {
       if (computation.value == value) {

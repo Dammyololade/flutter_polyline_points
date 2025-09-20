@@ -2,19 +2,19 @@
 class TrafficInfo {
   /// Current traffic conditions along the route
   final TrafficCondition overallCondition;
-  
+
   /// Detailed traffic segments with specific conditions
   final List<TrafficSegment>? segments;
-  
+
   /// Traffic-aware duration in seconds
   final int? durationInTraffic;
-  
+
   /// Traffic-aware duration as human-readable text
   final String? durationInTrafficText;
-  
+
   /// Delay caused by traffic in seconds
   final int? trafficDelay;
-  
+
   /// Last updated timestamp for traffic data
   final DateTime? lastUpdated;
 
@@ -30,9 +30,9 @@ class TrafficInfo {
   /// Create from JSON response
   factory TrafficInfo.fromJson(Map<String, dynamic> json) {
     return TrafficInfo(
-      overallCondition: TrafficCondition.fromString(
-        json['overallCondition'] ?? 'UNKNOWN'
-      ) ?? TrafficCondition.unknown,
+      overallCondition:
+          TrafficCondition.fromString(json['overallCondition'] ?? 'UNKNOWN') ??
+              TrafficCondition.unknown,
       segments: json['segments'] != null
           ? (json['segments'] as List)
               .map((segment) => TrafficSegment.fromJson(segment))
@@ -54,7 +54,8 @@ class TrafficInfo {
       if (segments != null)
         'segments': segments!.map((segment) => segment.toJson()).toList(),
       if (durationInTraffic != null) 'durationInTraffic': durationInTraffic,
-      if (durationInTrafficText != null) 'durationInTrafficText': durationInTrafficText,
+      if (durationInTrafficText != null)
+        'durationInTrafficText': durationInTrafficText,
       if (trafficDelay != null) 'trafficDelay': trafficDelay,
       if (lastUpdated != null) 'lastUpdated': lastUpdated!.toIso8601String(),
     };
@@ -76,7 +77,7 @@ class TrafficInfo {
   /// Get the most severe traffic condition from segments
   TrafficCondition get worstCondition {
     if (segments == null || segments!.isEmpty) return overallCondition;
-    
+
     TrafficCondition worst = TrafficCondition.light;
     for (final segment in segments!) {
       if (segment.condition.severity > worst.severity) {
@@ -124,16 +125,16 @@ class TrafficInfo {
 class TrafficSegment {
   /// Traffic condition for this segment
   final TrafficCondition condition;
-  
+
   /// Start index in the route polyline
   final int startPolylinePointIndex;
-  
+
   /// End index in the route polyline
   final int endPolylinePointIndex;
-  
+
   /// Length of this segment in meters
   final double? lengthMeters;
-  
+
   /// Speed in this segment (km/h)
   final double? speedKmh;
 
@@ -148,9 +149,8 @@ class TrafficSegment {
   /// Create from JSON response
   factory TrafficSegment.fromJson(Map<String, dynamic> json) {
     return TrafficSegment(
-      condition: TrafficCondition.fromString(
-        json['condition'] ?? 'UNKNOWN'
-      ) ?? TrafficCondition.unknown,
+      condition: TrafficCondition.fromString(json['condition'] ?? 'UNKNOWN') ??
+          TrafficCondition.unknown,
       startPolylinePointIndex: json['startPolylinePointIndex'] ?? 0,
       endPolylinePointIndex: json['endPolylinePointIndex'] ?? 0,
       lengthMeters: json['lengthMeters']?.toDouble(),
@@ -196,30 +196,30 @@ class TrafficSegment {
 enum TrafficCondition {
   /// Light traffic, normal flow
   light('LIGHT', 1, 'Light traffic'),
-  
+
   /// Moderate traffic, some delays
   moderate('MODERATE', 2, 'Moderate traffic'),
-  
+
   /// Heavy traffic, significant delays
   heavy('HEAVY', 3, 'Heavy traffic'),
-  
+
   /// Severe traffic, major delays
   severe('SEVERE', 4, 'Severe traffic'),
-  
+
   /// Unknown traffic condition
   unknown('UNKNOWN', 0, 'Unknown');
 
   const TrafficCondition(this.value, this.severity, this.description);
-  
+
   /// The string value used in API responses
   final String value;
-  
+
   /// Numeric severity level (higher = worse)
   final int severity;
-  
+
   /// Human-readable description
   final String description;
-  
+
   /// Convert from string value to enum
   static TrafficCondition? fromString(String value) {
     for (TrafficCondition condition in TrafficCondition.values) {
@@ -229,7 +229,7 @@ enum TrafficCondition {
     }
     return null;
   }
-  
+
   /// Get color representation for UI display
   String get colorHex {
     switch (this) {
@@ -245,7 +245,7 @@ enum TrafficCondition {
         return '#9E9E9E'; // Grey
     }
   }
-  
+
   /// Check if this condition indicates congestion
   bool get isCongested {
     return severity >= 2; // Moderate or worse

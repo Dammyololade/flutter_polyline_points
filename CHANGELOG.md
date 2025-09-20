@@ -1,7 +1,14 @@
-## [3.0.1] - 2024-07-23
+## [3.1.0] - 2025-09-20
+- **ENHANCED**: Added validation for bicycling and walking travel modes to ensure they use RoutingPreference.unspecified as required by Google Routes API. 
+  - Special thanks to [@enricava](https://github.com/enricava) for the contribution.
+- **Fixed**: Decoding issue on web.
+- **Fixed**: Decoding intermediate locations [issue](https://github.com/Dammyololade/flutter_polyline_points/pull/122). 
+  - Thanks to [@razosx](https://github.com/razosx)
+
+## [3.0.1] - 2025-07-23
 - **NEW**: Add support for custom headers in Routes API requests.
 
-## [3.0.0] - 2024-07-22
+## [3.0.0] - 2025-07-22
 
 ### 🚀 Major Refactor - Simplified and Unified API
 

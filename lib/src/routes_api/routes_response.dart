@@ -28,29 +28,32 @@ class RoutesApiResponse {
     try {
       return RoutesApiResponse(
         routes: json['routes'] != null
-            ? (json['routes'] as List).map((route) => Route.fromJson(route)).toList()
+            ? (json['routes'] as List)
+                .map((route) => Route.fromJson(route))
+                .toList()
             : [],
         rawJson: json,
         status: json['status'],
         errorMessage: json['errorMessage'],
       );
-    }  catch (e) {
+    } catch (e) {
       return RoutesApiResponse.error('Error parsing JSON: $e');
     }
   }
 
   factory RoutesApiResponse.error(String errorMessage) => RoutesApiResponse(
-    routes: [],
-    rawJson: {},
-    status: null,
-    errorMessage: errorMessage,
-  );
+        routes: [],
+        rawJson: {},
+        status: null,
+        errorMessage: errorMessage,
+      );
 
   /// Get the primary (first) route
   Route? get primaryRoute => routes.isNotEmpty ? routes.first : null;
 
   /// Get alternative routes (excluding the primary route)
-  List<Route> get alternativeRoutes => routes.length > 1 ? routes.skip(1).toList() : [];
+  List<Route> get alternativeRoutes =>
+      routes.length > 1 ? routes.skip(1).toList() : [];
 
   /// Check if the response contains any routes
   bool get hasRoutes => routes.isNotEmpty;
@@ -116,7 +119,7 @@ class Route {
   /// Create from JSON response
   factory Route.fromJson(Map<String, dynamic> json) {
     final polylineEncoded = json['polyline']?['encodedPolyline'];
-    
+
     return Route(
       duration: json['duration'] != null
           ? int.tryParse(json['duration'].toString().replaceAll('s', ''))
